@@ -691,10 +691,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _MapSize: 3000
   DropZoneRange: 8
+  AcceptableDropZoneSize: 500
   BRS_PlaneSpawn: {fileID: 1535088515930718, guid: 561ed58d5b5b7d3428a78123e277914e,
     type: 2}
   BRS_PlaneAltitude: 800
-  BRS_PlaneAirspeed: 150
   PlaneStart: {fileID: 674172309}
   PlaneStop: {fileID: 2000571271}
   VerifiedPath: 0
@@ -1065,6 +1065,19 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224396730936630332, guid: b695382be042f624c97286085c218afb,
     type: 2}
   m_PrefabInternal: {fileID: 470784842}
+--- !u!1 &2010264874 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1698148697932008, guid: 2753e3c2a3bddc342a2fd8dd859bdc3d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1338605266}
+--- !u!45 &2010264876
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2010264874}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 614a3d8218d370d40895a63854c838b3, type: 2}
 --- !u!1 &2035710592
 GameObject:
   m_ObjectHideFlags: 0
