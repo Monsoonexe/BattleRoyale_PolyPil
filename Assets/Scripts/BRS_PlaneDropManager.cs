@@ -234,14 +234,14 @@ public class BRS_PlaneDropManager : MonoBehaviour
         return raycastHitEndpoint;
     }
 
-    public void ToggleDropZones(bool enabled)
+    public void ToggleDropZones(bool active)
     {
         //look at each dropZone in our list
         foreach(GameObject dropZone in acceptableDropZones)
         {
             //set it active or inactive
-            dropZone.SetActive(enabled);
+            dropZone.GetComponent<CapsuleCollider>().enabled = active;
         }
-        if (DEBUG) Debug.Log("All Drop Zones Active: " + enabled);
+        if (DEBUG) Debug.Log("All Drop Zones Active: " + active);
     }
 }
