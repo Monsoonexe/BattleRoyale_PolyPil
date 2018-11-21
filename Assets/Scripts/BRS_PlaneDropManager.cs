@@ -10,7 +10,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
     public GameObject[] acceptableDropZones;//how big should the zone be that the plane flies through
 	[Header("Plane Settings")]
 	public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
-    public GameObject debugEndpointMarker;//marks beginnning and end points for debugging purposes
+    public GameObject endpointMarker;//marks beginnning and end points for debugging purposes
 
     public int failedPathAltitudeIncrementAmount = 50;//if the flight path fails, raise the altitude by this much before trying again
     public bool DEBUG = true;//if true, prints debug statements
@@ -61,7 +61,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         if (DEBUG)
         {
             //make sure it is visible
-            debugEndpointMarker.GetComponent<MeshRenderer>().enabled = true;
+            endpointMarker.GetComponent<MeshRenderer>().enabled = true;
         }
 
         //set possible start and end points
@@ -88,7 +88,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         //find a start point
         planeStartPoint = GetRandomPointOnCircle();
         //spawn debugger object. this object is the parent, so both will be destroyed
-        if(DEBUG)Instantiate(debugEndpointMarker, planeStartPoint, Quaternion.identity, this.transform);
+        if(DEBUG)Instantiate(endpointMarker, planeStartPoint, Quaternion.identity, this.transform);
 
 
         //look for an endpoint
@@ -100,8 +100,9 @@ public class BRS_PlaneDropManager : MonoBehaviour
             }
             //Debug.Log("Attempt No: " + spawnAttempts);
             planeEndPoint = GetRandomPointOnCircle();
+            endpointMarker = Instantiate(endpointMarker, planeEndPoint, Quaternion.identity, this.transform);
 
-            ////debug endpoints
+
             //if (DEBUG) Instantiate(debugEndpointMarker, planeEndPoint, Quaternion.identity, this.transform);
 
             if (Physics.Raycast(planeStartPoint, planeEndPoint - planeStartPoint, out raycastHitInfo, spawnBoundsCircleRadius))
@@ -113,7 +114,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
                         //Debug.Log("Flight Path Confirmed after: " + spawnAttempts + " attempts. Flying through: " + raycastHitInfo.collider.gameObject.name);
                         //now we know that the possible path goes through a good LZ, however, is the path on the other side clear?
-                        verifiedPath = RepeatingRayCast(false, planeStartPoint, Instantiate(debugEndpointMarker, planeEndPoint, Quaternion.identity, this.transform));
+                        verifiedPath = RepeatingRayCast(verifiedPath, planeStartPoint, endpointMarker);
                         //if (DEBUG) Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
                         break;//break out of for loop looking through gameObjects in list
                     }//end if
@@ -123,7 +124,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
             }//end if
             //else
             //{
-            //    Debug.Log("MISS!");
+            //    if(DEBUG) Debug.Log("MISS!");
             //}
         }//end for
 
@@ -158,9 +159,16 @@ public class BRS_PlaneDropManager : MonoBehaviour
         GameObject plane = Instantiate(BRS_PlaneSpawn, planeStartPoint, Quaternion.identity);
         plane.transform.LookAt (planeEndPoint);//point plane towards endpoint
         //seppuku! this object is no longer needed -- kill children as well
-        //Destroy(this.gameObject);
-        this.enabled = false;
-	}
+        if (DEBUG)
+        {
+
+            this.enabled = false;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     private bool RepeatingRayCast(bool success, Vector3 startPoint, GameObject endPoint)
     {
