@@ -10,6 +10,7 @@ public class Ammo : Item
     {
         this.itemType = ItemTypeENUM.ammo;
         this.stackQuantity = 36;
+        
     }
 
 }
