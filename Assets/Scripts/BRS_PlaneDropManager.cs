@@ -89,7 +89,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
             //debug endpoints
             //Instantiate(debugEndpointMarker, planeEndPoint, Quaternion.identity, this.transform);
 
-            if (Physics.Raycast(planeStartPoint, planeEndPoint, out raycastHitInfo, spawnBoundsCircleRadius))
+            if (Physics.Raycast(planeStartPoint, planeEndPoint - planeStartPoint, out raycastHitInfo, spawnBoundsCircleRadius))
             {
                 for(int i = 0; i < acceptableDropZones.Length; ++i)
                 {
@@ -97,6 +97,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
                     {
                         //Debug.Log("Flight Path Confirmed after: " + spawnAttempts + " attempts. Flying through: " + raycastHitInfo.collider.gameObject.name);
                         verifiedPath = true;
+                        Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
                         break;//break out of for loop looking through gameObjects in list
                     }//end if
                 }//end for
