@@ -1,7 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Weapon : ScriptableObject {
+public class Weapon : Item {
+    [Header("Weapon")]
+    public AmmoTypeENUM ammoType;
+    public WeaponTypeENUM weaponType;
+    public int hands;
+    public GameObject[] attachments;
+
+    
     
 }

@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
 static class Weapon_UnityIntegration
 {
 
-    [MenuItem("Assets/Create/Weapon")]
+    [MenuItem("Assets/Create/ScriptableObject/Weapon")]
     public static void CreateScriptableObject()
     {
         ScriptableObjectUtility.CreateAsset<Weapon>();
