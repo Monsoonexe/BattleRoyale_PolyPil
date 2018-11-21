@@ -97,7 +97,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
                     {
                         //Debug.Log("Flight Path Confirmed after: " + spawnAttempts + " attempts. Flying through: " + raycastHitInfo.collider.gameObject.name);
                         verifiedPath = true;
-                        Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
+                        //Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
                         break;//break out of for loop looking through gameObjects in list
                     }//end if
                 }//end for
