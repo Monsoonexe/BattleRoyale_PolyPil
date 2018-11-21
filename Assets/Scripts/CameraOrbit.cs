@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraOrbit : MonoBehaviour
 {
-	private Transform _XForm_Camera;
+	//private Transform _XForm_Camera;
 	private Transform _XForm_Parent;
 	private Vector3 _LocalRotation;
 
-	private float _CameraDistance = 10f;
+	//private readonly float _CameraDistance = 10f;
 	public float MouseSensitivity = 4.0f;
 	public float ScrolSensitivity = 2.0f;
 	public float OrbitDampening = 10.0f;
@@ -18,7 +16,7 @@ public class CameraOrbit : MonoBehaviour
 
 	void Start()
 	{
-		this._XForm_Camera = this.transform;
+		//this._XForm_Camera = this.transform;
 		this._XForm_Parent = this.transform.parent;
 	}
 
