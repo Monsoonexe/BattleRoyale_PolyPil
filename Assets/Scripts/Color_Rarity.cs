@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
-
-public class Colors_Rarity : ScriptableObject
+public class Color_Rarity : MonoBehaviour 
 {
     [Header("Colors for Rarity")]
-    public Color common;
-    public Color uncommon;
-    public Color rare;
-    public Color epic;
-    public Color legendary;
-    public Color mythic;
-    
-    public Color GetColor(ItemRarityENUM rarity)
+    public static readonly Color common = new Color(0.5f, 0.5f, 0.5f, 1.0f);//gray
+    public static readonly Color uncommon = new Color(0.3f, 0.6f, 0.35f, 1.0f);//green
+    public static readonly Color rare = new Color(0.13f, 0.45f, 1.0f, 1.0f);//blue
+    public static readonly Color epic = new Color(0.85f, 0.08f, 1.0f, 1.0f);//violet
+    public static readonly Color legendary = new Color(1.0f, 1.0f, 0.25f, 1.0f);//yellow
+    public static readonly Color mythic = new Color(1.0f, 0.2f, 0.2f, 1.0f);//red
+
+    public static Color GetColor(ItemRarityENUM rarity)
     {
         Color rarityColor;
         switch (rarity)
@@ -40,6 +39,7 @@ public class Colors_Rarity : ScriptableObject
         }
         return rarityColor;
     }
-    
+
 
 }
+
