@@ -2,50 +2,44 @@
 using System.Collections;
 
 public class BRS_PlaneDropManager : MonoBehaviour
-     
+
 {
     //public GameObject EndPointBall;
     [Header("Map Settings")]
     public Transform planeSpawnBounds;//where can the plane start and stop?
     public GameObject[] acceptableDropZones;//how big should the zone be that the plane flies through
-	[Header("Plane Settings")]
-	public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
-    public GameObject debugEndpointMarker;//marks beginnning and end points for debugging purposes
+    [Header("Plane Settings")]
+    public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
+    public GameObject endpointMarker;//marks beginnning and end points for debugging purposes
 
     public int failedPathAltitudeIncrementAmount = 50;//if the flight path fails, raise the altitude by this much before trying again
     public bool DEBUG = true;//if true, prints debug statements
+
+    private bool verifiedPath = false;
 
     //how high does the plane fly?
     private float planeFlightAltitude = 800.0f;
 
     //radius of spawn zone
-    private float spawnBoundsCircleRadius;
-
-    //was there a path successfully created
-    private bool verifiedPath = false;
+    private float spawnBoundsCircleRadius = 100.0f;
 
     //start and end points for plane to fly through
     private Vector3 planeStartPoint;
     private Vector3 planeEndPoint;
 
-    //initial path finder
-    private int spawnAttempts = 0;// used to track failures. app should pause or fail after this many fails
-    private readonly int spawnAttemptsUntilFailure = 15;//default of 15 tries
+    private int unsuccessfulPasses = 0;
+    private readonly int flightPathChecksUntilFailure = 12;
 
-    //recursion for verifying path
-    private int recursionAttempts = 0;//tracks recursion attempts
-    private readonly int recursionAttemptsUntilFailure = 5;//give up after this many failed attempts
-
-	void Start ()
-	{
+    void Start()
+    {
         //error checking
-        if(planeSpawnBounds == null)
+        if (planeSpawnBounds == null)
         {
             Debug.LogError("ERROR: plane spanw bounds not set!");
             Debug.Break();
         }
 
-        if(acceptableDropZones.Length < 1)
+        if (acceptableDropZones.Length < 1)
         {
             Debug.LogError("ERROR: No Acceptable Drop Zones in list!");
             Debug.Break();
@@ -55,14 +49,22 @@ public class BRS_PlaneDropManager : MonoBehaviour
         planeFlightAltitude = planeSpawnBounds.position.y > 0 ? planeSpawnBounds.position.y : 200f;//verifies that altitude is above 0
 
         //set radius of spawnBoundsCircleRadius
-        spawnBoundsCircleRadius = planeSpawnBounds.localScale.x / 2;
+        //leave at default value if local scale is too small
+        spawnBoundsCircleRadius = planeSpawnBounds.localScale.x / 2 > spawnBoundsCircleRadius ? planeSpawnBounds.localScale.x / 2 : spawnBoundsCircleRadius;
+
+        if (DEBUG)
+        {
+            //make sure endpoint prefab is visible
+            endpointMarker.GetComponent<MeshRenderer>().enabled = true;
+        }
 
         //set possible start and end points
+        SetupFlightPath();
     }
 
     private Vector3 GetRandomPointOnCircle()
     {
-        //get terminal point on unit circle, the multiply by radius
+        //get terminal point on unit circle, then multiply by radius
         float randomArc = Random.Range(0, 2 * Mathf.PI);
         Vector3 randomPoint = new Vector3(//create new vector3
             (Mathf.Sin(randomArc) * spawnBoundsCircleRadius) + planeSpawnBounds.position.x, //get x coordiantes on unit circle, multiply by radius, offset relative to bounds
@@ -75,111 +77,172 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     private void SetupFlightPath()
     {
-        //Debug.Log("Setting up Flight Path. Max Attempts: " + spawnAttemptsUntilFailure);
-        RaycastHit raycastHitInfo;
+        bool endpointHit = false;
+        bool flightPathThroughLZ = false;
 
         //find a start point
         planeStartPoint = GetRandomPointOnCircle();
         //spawn debugger object. this object is the parent, so both will be destroyed
-        if(DEBUG)Instantiate(debugEndpointMarker, planeStartPoint, Quaternion.identity, this.transform);
+        if (DEBUG)
+        {
+            GameObject startMark = Instantiate(endpointMarker, planeStartPoint, Quaternion.identity, this.transform);
+            startMark.name = "StartMarker: " + unsuccessfulPasses;
 
+        }
 
         //look for an endpoint
-        for (spawnAttempts = 1; spawnAttempts <= spawnAttemptsUntilFailure; ++spawnAttempts)//while you don't have a valid flight path...
+        for (int endPointsFound = 1; endPointsFound <= flightPathChecksUntilFailure; ++endPointsFound)//while you don't have a valid flight path...
         {
-            if (verifiedPath)
-            {
-                break;//break out of for loop setting up viable flight path
-            }
-            //Debug.Log("Attempt No: " + spawnAttempts);
+            //Debug.Log("Attempt No: " + endPointsFound);
+            //get end point on circle
             planeEndPoint = GetRandomPointOnCircle();
+            //create a new endpoint marker at that location
+            endpointMarker = Instantiate(endpointMarker, planeEndPoint, Quaternion.identity, this.transform);
+            if (DEBUG) endpointMarker.name = "Endpoint Marker " + unsuccessfulPasses + "." + endPointsFound;
 
-            ////debug endpoints
-            //if (DEBUG) Instantiate(debugEndpointMarker, planeEndPoint, Quaternion.identity, this.transform);
-
-            if (Physics.Raycast(planeStartPoint, planeEndPoint - planeStartPoint, out raycastHitInfo, spawnBoundsCircleRadius))
+            //test if flight path goes through LZ
+            if (TestRaycastThroughDropZone(planeStartPoint, endpointMarker.transform.position))
             {
-                for (int i = 0; i < acceptableDropZones.Length; ++i)
-                {
-                    if (raycastHitInfo.collider.gameObject == acceptableDropZones[i])//if the game object that was hit is inside this list of good zones
-                    {
+                flightPathThroughLZ = true;
+            }
+            else
+            {
+                if (DEBUG) Debug.Log("Flight Path INVALID: Flight path not through LZ.");
+            }
 
-                        //Debug.Log("Flight Path Confirmed after: " + spawnAttempts + " attempts. Flying through: " + raycastHitInfo.collider.gameObject.name);
-                        //now we know that the possible path goes through a good LZ, however, is the path on the other side clear?
-                        verifiedPath = RepeatingRayCast(false, planeStartPoint, Instantiate(debugEndpointMarker, planeEndPoint, Quaternion.identity, this.transform));
-                        //if (DEBUG) Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
-                        break;//break out of for loop looking through gameObjects in list
-                    }//end if
-                }//end for
-                //if(!verifiedPath) Debug.Log("MISSED! Instead hit: " + raycastHitInfo.collider.gameObject.name);
+            //test if flight path is clear all the way to endpoint
+            if (TestRaycastHitEndPoint(planeStartPoint, endpointMarker))
+            {
+                endpointHit = true;
+            }
+            else
+            {
+                if (DEBUG) Debug.Log("Flight Path INVALID: Endpoint Marker Not Hit.");
+            }
 
-            }//end if
-            //else
-            //{
-            //    Debug.Log("MISS!");
-            //}
+            //does the flight unobstructed and through a drop zone
+            if(endpointHit && flightPathThroughLZ)
+            {
+                ToggleDropZones(true);//turn LZ on
+                SpawnPlane();
+                verifiedPath = true;
+                break;
+            }
+            else
+            {
+                endpointHit = false;
+                flightPathThroughLZ = false;
+                verifiedPath = false;
+            }
+
+            
         }//end for
 
         if (!verifiedPath)
         {
+            //this altitude is not working. keep raising
+            if (++unsuccessfulPasses > flightPathChecksUntilFailure)//we've been here before
+            {
+                Debug.LogError("ERROR! Flight path failed after " + unsuccessfulPasses * flightPathChecksUntilFailure + " attempts. Adjust planeSpawnBounds. Skipping Plane Deployment");
+                return;
+            }
             //Debug.Log("Altitude too low. Raising Altitude and trying again.");
             //raise altitude and try again
             planeFlightAltitude += failedPathAltitudeIncrementAmount;
             //try again
             SetupFlightPath();
-            //Debug.Break();
-        }
-
-    }//end func
-
-	private void LateUpdate()
-	{
-
-        if (verifiedPath)
-        {
-            SpawnPlane();
         }
         else
         {
-            SetupFlightPath();
+            return;
         }
-	}
+        
+        
+    }//end func
 
-	private void SpawnPlane()
-	{
+    private void SpawnPlane()
+    {
         //create this plane in the world at this position, with no rotation
         GameObject plane = Instantiate(BRS_PlaneSpawn, planeStartPoint, Quaternion.identity);
-        plane.transform.LookAt (planeEndPoint);//point plane towards endpoint
+        plane.transform.LookAt(planeEndPoint);//point plane towards endpoint
         //seppuku! this object is no longer needed -- kill children as well
-        //Destroy(this.gameObject);
-        this.enabled = false;
-	}
+        if (DEBUG)
+        {
 
-    private bool RepeatingRayCast(bool success, Vector3 startPoint, GameObject endPoint)
-    {
-        if (recursionAttempts++ > recursionAttemptsUntilFailure)
-        {
-            recursionAttempts = 0;
-            return false;
+            this.enabled = false;
         }
-        RaycastHit raycastHitInfo;
-        if(Physics.Raycast(startPoint, endPoint.transform.position - startPoint, out raycastHitInfo, spawnBoundsCircleRadius))
+        else
         {
-            //if (DEBUG) Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
-            if (raycastHitInfo.collider.CompareTag("Terrain")) return false;
-            for (int i = 0; i < acceptableDropZones.Length; ++i)
+            Destroy(this.gameObject);
+        }
+    }
+
+    private bool TestRaycastThroughDropZone(Vector3 startPoint, Vector3 targetObject)
+    {
+        //turn drop zone colliders on
+        ToggleDropZones(true);//turn LZ on
+        //did the raycast go through a drop zone?
+        bool raycastThroughDropZone = false;
+        //RaycastHit will store information about anything hit by the raycast
+        RaycastHit raycastHitInfo;
+        //raycast
+        if (Physics.Raycast(startPoint, targetObject - startPoint, out raycastHitInfo, spawnBoundsCircleRadius * 2))
+        {
+            if (DEBUG) Debug.Log("Object Hit: " + raycastHitInfo.collider.gameObject.name);
+            for (int i = 0; i < acceptableDropZones.Length; ++i)//look through each drop zone in list
             {
                 if (raycastHitInfo.collider.gameObject == acceptableDropZones[i])//if the game object that was hit is inside this list of good zones
                 {
-                    
-                    return RepeatingRayCast(false, raycastHitInfo.point, endPoint);
+                    if(DEBUG) Debug.Log("Landing Zone: " + raycastHitInfo.collider.gameObject.name);
+                    raycastThroughDropZone = true;//booyah!
+                    //if (DEBUG) Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
+                    break;//break out of for loop looking through gameObjects in list
                 }//end if
-                if (raycastHitInfo.collider.gameObject == endPoint) return true;
             }//end for
+
+        }//end if
+        else
+        {
+            Debug.LogError("ERROR! Raycast missed target LZ");
         }
 
-        return false;        
-
+        return raycastThroughDropZone;
     }
 
+    private bool TestRaycastHitEndPoint(Vector3 startPoint, GameObject targetObject)
+    {
+        //turn drop zones off so they don't interfere with raycast
+        ToggleDropZones(false);//turn LZ off
+
+        //did the raycast hit the endpoint unobstructed by terrain or obstacles?
+        bool raycastHitEndpoint = false;
+        //RaycastHit holds info about raycast
+        RaycastHit raycastHitInfo;
+        //if something was hit...
+        if(Physics.Raycast(startPoint, targetObject.transform.position - startPoint, out raycastHitInfo, spawnBoundsCircleRadius * 2))
+        {
+            if (DEBUG) Debug.Log("Object Hit: " + raycastHitInfo.collider.gameObject.name);
+            if (raycastHitInfo.collider.gameObject == targetObject)//were we trying to hit this thing?
+            {
+                raycastHitEndpoint = true;//booyah!
+                if (DEBUG) Debug.Log("Endpoint Marker Hit: " + raycastHitInfo.collider.gameObject.name);
+            }
+        }
+        else
+        {
+            Debug.LogError("ERROR! Raycast missed it's target: " + targetObject);
+        }
+        return raycastHitEndpoint;
+    }
+
+    public void ToggleDropZones(bool active)
+    {
+        //look at each dropZone in our list
+        foreach(GameObject dropZone in acceptableDropZones)
+        {
+            //set it active or inactive
+            dropZone.GetComponent<CapsuleCollider>().enabled = active;
+        }
+        if (DEBUG) Debug.Log("All Drop Zones Active: " + active);
+    }
 }
