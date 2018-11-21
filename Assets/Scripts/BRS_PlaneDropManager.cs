@@ -100,7 +100,6 @@ public class BRS_PlaneDropManager : MonoBehaviour
             endpointMarker = Instantiate(endpointMarker, planeEndPoint, Quaternion.identity, this.transform);
             if (DEBUG) endpointMarker.name = "Endpoint Marker " + unsuccessfulPasses + "." + endPointsFound;
 
-            ToggleDropZones(true);//turn LZ on
             //test if flight path goes through LZ
             if (TestRaycastThroughDropZone(planeStartPoint, endpointMarker.transform.position))
             {
@@ -110,9 +109,6 @@ public class BRS_PlaneDropManager : MonoBehaviour
             {
                 if (DEBUG) Debug.Log("Flight Path INVALID: Flight path not through LZ.");
             }
-
-            //turn drop zones off so they don't interfere with raycast
-            ToggleDropZones(false);//turn LZ off
 
             //test if flight path is clear all the way to endpoint
             if (TestRaycastHitEndPoint(planeStartPoint, endpointMarker))
@@ -183,6 +179,8 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     private bool TestRaycastThroughDropZone(Vector3 startPoint, Vector3 targetObject)
     {
+        //turn drop zone colliders on
+        ToggleDropZones(true);//turn LZ on
         //did the raycast go through a drop zone?
         bool raycastThroughDropZone = false;
         //RaycastHit will store information about anything hit by the raycast
@@ -213,6 +211,9 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     private bool TestRaycastHitEndPoint(Vector3 startPoint, GameObject targetObject)
     {
+        //turn drop zones off so they don't interfere with raycast
+        ToggleDropZones(false);//turn LZ off
+
         //did the raycast hit the endpoint unobstructed by terrain or obstacles?
         bool raycastHitEndpoint = false;
         //RaycastHit holds info about raycast
