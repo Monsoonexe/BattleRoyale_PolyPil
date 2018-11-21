@@ -4,6 +4,12 @@ public class Throwable : Item {
     [Header("Throwable")]
     public ThrowableTypeENUM throwType;
     public ThrowableImpactTypeENUM impactType;
-    public float throwDistance;
-    public float cookTime;
+    public float throwDistance = 3.0f;
+    public float cookTime = 3.0f;
+
+    private void Awake()
+    {
+        this.itemType = ItemTypeENUM.throwable;
+        this.stackQuantity = 5;
+    }
 }

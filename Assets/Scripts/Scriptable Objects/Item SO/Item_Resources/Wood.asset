@@ -8,18 +8,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d9e9587ba273ae4585a996973296367, type: 3}
-  m_Name: Cool Sniper
+  m_Script: {fileID: 11500000, guid: f50feacb74bca2045b55b5a844fdc458, type: 3}
+  m_Name: Wood
   m_EditorClassIdentifier: 
-  itemName: Cool Sniper
-  itemType: 5
-  itemRarity: 3
+  itemName: 'Resource: '
+  itemType: 3
+  itemRarity: 0
   quantity: 1
+  stackQuantity: 0
   buttonToPickUp: 70
   itemIcon: {fileID: 0}
   itemModel: {fileID: 0}
   itemCondition: 1
-  ammoType: 1
-  weaponType: 3
-  hands: 2
-  attachments: []
+  resourceType: 0

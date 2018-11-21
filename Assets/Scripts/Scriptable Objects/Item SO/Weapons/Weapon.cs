@@ -8,6 +8,13 @@ public class Weapon : Item {
     public int hands;
     public GameObject[] attachments;
 
-    
-    
+    private void Awake()
+    {
+        this.itemType = ItemTypeENUM.weapon;
+        this.quantity = 1;
+        this.stackQuantity = 1;
+    }
+
+
+
 }

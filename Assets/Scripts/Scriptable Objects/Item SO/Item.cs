@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Item : ScriptableObject {
     [Header("Item")]
@@ -8,8 +6,10 @@ public class Item : ScriptableObject {
     public ItemTypeENUM itemType;
     public ItemRarityENUM itemRarity;
     public int quantity;
-    public char buttonToPickUp;
+    public int stackQuantity; // <= 1 means cannot stack
+    public char buttonToPickUp = 'F';
+    public Sprite itemIcon;
     public GameObject itemModel;
     [Range(0, 1)]
-    public float itemCondition;
+    public float itemCondition = 1.0f;
 }
