@@ -55,14 +55,21 @@ public class BRS_PlaneDropManager : MonoBehaviour
         planeFlightAltitude = planeSpawnBounds.position.y > 0 ? planeSpawnBounds.position.y : 200f;//verifies that altitude is above 0
 
         //set radius of spawnBoundsCircleRadius
+        //TODO set default minimum value to protect from less than 0 values
         spawnBoundsCircleRadius = planeSpawnBounds.localScale.x / 2;
+
+        if (DEBUG)
+        {
+            //make sure it is visible
+            debugEndpointMarker.GetComponent<MeshRenderer>().enabled = true;
+        }
 
         //set possible start and end points
     }
 
     private Vector3 GetRandomPointOnCircle()
     {
-        //get terminal point on unit circle, the multiply by radius
+        //get terminal point on unit circle, then multiply by radius
         float randomArc = Random.Range(0, 2 * Mathf.PI);
         Vector3 randomPoint = new Vector3(//create new vector3
             (Mathf.Sin(randomArc) * spawnBoundsCircleRadius) + planeSpawnBounds.position.x, //get x coordiantes on unit circle, multiply by radius, offset relative to bounds
@@ -75,7 +82,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     private void SetupFlightPath()
     {
-        //Debug.Log("Setting up Flight Path. Max Attempts: " + spawnAttemptsUntilFailure);
+        //if(DEBUG) Debug.Log("Setting up Flight Path. Max Attempts: " + spawnAttemptsUntilFailure);
         RaycastHit raycastHitInfo;
 
         //find a start point
@@ -163,22 +170,24 @@ public class BRS_PlaneDropManager : MonoBehaviour
             return false;
         }
         RaycastHit raycastHitInfo;
-        if(Physics.Raycast(startPoint, endPoint.transform.position - startPoint, out raycastHitInfo, spawnBoundsCircleRadius))
+        if (Physics.Raycast(startPoint, endPoint.transform.position - startPoint, out raycastHitInfo, spawnBoundsCircleRadius))
         {
             //if (DEBUG) Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
+            //invalid if raycast hits terrain
             if (raycastHitInfo.collider.CompareTag("Terrain")) return false;
+            //valid if raycast hits endpoint
+            if (raycastHitInfo.collider.gameObject == endPoint) return true;
+            //try again if raycast hits dropzone
             for (int i = 0; i < acceptableDropZones.Length; ++i)
             {
                 if (raycastHitInfo.collider.gameObject == acceptableDropZones[i])//if the game object that was hit is inside this list of good zones
                 {
-                    
                     return RepeatingRayCast(false, raycastHitInfo.point, endPoint);
                 }//end if
-                if (raycastHitInfo.collider.gameObject == endPoint) return true;
             }//end for
         }
 
-        return false;        
+        return false;
 
     }
 
