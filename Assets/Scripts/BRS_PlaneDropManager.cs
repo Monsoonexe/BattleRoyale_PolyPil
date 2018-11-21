@@ -12,9 +12,6 @@ public class BRS_PlaneDropManager : MonoBehaviour
 	public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
     public GameObject debugEndpointMarker;//marks beginnning and end points for debugging purposes
 
-    //public GameObject PlaneStart;//start marker
-    //public GameObject PlaneStop;//end marker
-
     //how high does the plane fly?
     private float planeFlightAltitude = 800.0f;
 
