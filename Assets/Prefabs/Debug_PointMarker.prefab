@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23926602744246586}
   - component: {fileID: 135151366883888778}
   m_Layer: 0
-  m_Name: StartPoint
+  m_Name: Debug_PointMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
