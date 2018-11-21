@@ -27,7 +27,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
     private Vector3 planeStartPoint;
     private Vector3 planeEndPoint;
 
-    private int markerCounter = 0;
+    private int unsuccessfulPasses = 0;
     private readonly int flightPathChecksUntilFailure = 12;
 
     void Start()
@@ -86,7 +86,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         if (DEBUG)
         {
             GameObject startMark = Instantiate(endpointMarker, planeStartPoint, Quaternion.identity, this.transform);
-            startMark.name = "StartMarker: " + ++markerCounter;
+            startMark.name = "StartMarker: " + unsuccessfulPasses;
 
         }
 
@@ -98,7 +98,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
             planeEndPoint = GetRandomPointOnCircle();
             //create a new endpoint marker at that location
             endpointMarker = Instantiate(endpointMarker, planeEndPoint, Quaternion.identity, this.transform);
-            if (DEBUG) endpointMarker.name = "Endpoint Marker " + markerCounter + "." + endPointsFound;
+            if (DEBUG) endpointMarker.name = "Endpoint Marker " + unsuccessfulPasses + "." + endPointsFound;
 
             ToggleDropZones(true);//turn LZ on
             //test if flight path goes through LZ
@@ -145,9 +145,9 @@ public class BRS_PlaneDropManager : MonoBehaviour
         if (!verifiedPath)
         {
             //this altitude is not working. keep raising
-            if (markerCounter > flightPathChecksUntilFailure)//we've been here before
+            if (++unsuccessfulPasses > flightPathChecksUntilFailure)//we've been here before
             {
-                Debug.LogError("ERROR! Flight path failed after " + markerCounter + "." + flightPathChecksUntilFailure + " attempts. Adjust planeSpawnBounds. Skipping Plane Deployment");
+                Debug.LogError("ERROR! Flight path failed after " + unsuccessfulPasses * flightPathChecksUntilFailure + " attempts. Adjust planeSpawnBounds. Skipping Plane Deployment");
                 return;
             }
             //Debug.Log("Altitude too low. Raising Altitude and trying again.");
