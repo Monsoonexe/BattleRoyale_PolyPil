@@ -12,6 +12,9 @@ public class BRS_PlaneDropManager : MonoBehaviour
 	public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
     public GameObject debugEndpointMarker;//marks beginnning and end points for debugging purposes
 
+    public int failedPathAltitudeIncrementAmount = 50;//if the flight path fails, raise the altitude by this much before trying again
+    public bool DEBUG = true;//if true, prints debug statements
+
     //how high does the plane fly?
     private float planeFlightAltitude = 800.0f;
 
@@ -25,8 +28,13 @@ public class BRS_PlaneDropManager : MonoBehaviour
     private Vector3 planeStartPoint;
     private Vector3 planeEndPoint;
 
+    //initial path finder
     private int spawnAttempts = 0;// used to track failures. app should pause or fail after this many fails
     private readonly int spawnAttemptsUntilFailure = 15;//default of 15 tries
+
+    //recursion for verifying path
+    private int recursionAttempts = 0;//tracks recursion attempts
+    private readonly int recursionAttemptsUntilFailure = 5;//give up after this many failed attempts
 
 	void Start ()
 	{
@@ -43,8 +51,8 @@ public class BRS_PlaneDropManager : MonoBehaviour
             Debug.Break();
         }
 
-        //set altitude
-        planeFlightAltitude = planeSpawnBounds.position.y;
+        //set and check altitude
+        planeFlightAltitude = planeSpawnBounds.position.y > 0 ? planeSpawnBounds.position.y : 200f;//verifies that altitude is above 0
 
         //set radius of spawnBoundsCircleRadius
         spawnBoundsCircleRadius = planeSpawnBounds.localScale.x / 2;
@@ -73,7 +81,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         //find a start point
         planeStartPoint = GetRandomPointOnCircle();
         //spawn debugger object. this object is the parent, so both will be destroyed
-        //Instantiate(debugEndpointMarker, planeStartPoint, Quaternion.identity, this.transform);
+        if(DEBUG)Instantiate(debugEndpointMarker, planeStartPoint, Quaternion.identity, this.transform);
 
 
         //look for an endpoint
@@ -86,34 +94,40 @@ public class BRS_PlaneDropManager : MonoBehaviour
             //Debug.Log("Attempt No: " + spawnAttempts);
             planeEndPoint = GetRandomPointOnCircle();
 
-            //debug endpoints
-            //Instantiate(debugEndpointMarker, planeEndPoint, Quaternion.identity, this.transform);
+            ////debug endpoints
+            //if (DEBUG) Instantiate(debugEndpointMarker, planeEndPoint, Quaternion.identity, this.transform);
 
             if (Physics.Raycast(planeStartPoint, planeEndPoint - planeStartPoint, out raycastHitInfo, spawnBoundsCircleRadius))
             {
-                for(int i = 0; i < acceptableDropZones.Length; ++i)
+                for (int i = 0; i < acceptableDropZones.Length; ++i)
                 {
-                    if(raycastHitInfo.collider.gameObject == acceptableDropZones[i])//if the game object that was hit is inside this list of good zones
+                    if (raycastHitInfo.collider.gameObject == acceptableDropZones[i])//if the game object that was hit is inside this list of good zones
                     {
+
                         //Debug.Log("Flight Path Confirmed after: " + spawnAttempts + " attempts. Flying through: " + raycastHitInfo.collider.gameObject.name);
-                        verifiedPath = true;
-                        //Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
+                        //now we know that the possible path goes through a good LZ, however, is the path on the other side clear?
+                        verifiedPath = RepeatingRayCast(false, planeStartPoint, Instantiate(debugEndpointMarker, planeEndPoint, Quaternion.identity, this.transform));
+                        //if (DEBUG) Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
                         break;//break out of for loop looking through gameObjects in list
                     }//end if
                 }//end for
                 //if(!verifiedPath) Debug.Log("MISSED! Instead hit: " + raycastHitInfo.collider.gameObject.name);
-                
+
             }//end if
             //else
             //{
             //    Debug.Log("MISS!");
             //}
-        }//end while
+        }//end for
 
         if (!verifiedPath)
         {
-            Debug.LogError("ERROR! Flight path could not be created after " + spawnAttempts + " attempts.");
-            Debug.Break();
+            //Debug.Log("Altitude too low. Raising Altitude and trying again.");
+            //raise altitude and try again
+            planeFlightAltitude += failedPathAltitudeIncrementAmount;
+            //try again
+            SetupFlightPath();
+            //Debug.Break();
         }
 
     }//end func
@@ -140,5 +154,32 @@ public class BRS_PlaneDropManager : MonoBehaviour
         //Destroy(this.gameObject);
         this.enabled = false;
 	}
+
+    private bool RepeatingRayCast(bool success, Vector3 startPoint, GameObject endPoint)
+    {
+        if (recursionAttempts++ > recursionAttemptsUntilFailure)
+        {
+            recursionAttempts = 0;
+            return false;
+        }
+        RaycastHit raycastHitInfo;
+        if(Physics.Raycast(startPoint, endPoint.transform.position - startPoint, out raycastHitInfo, spawnBoundsCircleRadius))
+        {
+            //if (DEBUG) Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
+            if (raycastHitInfo.collider.CompareTag("Terrain")) return false;
+            for (int i = 0; i < acceptableDropZones.Length; ++i)
+            {
+                if (raycastHitInfo.collider.gameObject == acceptableDropZones[i])//if the game object that was hit is inside this list of good zones
+                {
+                    
+                    return RepeatingRayCast(false, raycastHitInfo.point, endPoint);
+                }//end if
+                if (raycastHitInfo.collider.gameObject == endPoint) return true;
+            }//end for
+        }
+
+        return false;        
+
+    }
 
 }

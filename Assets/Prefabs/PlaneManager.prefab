@@ -306,4 +306,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0df4e881f02d1345a3122f8b9b5ab0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Airspeed: 100
+  Airspeed: 500

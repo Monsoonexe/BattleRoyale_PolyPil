@@ -8,6 +8,7 @@ TagManager:
   - MiniMap Camera
   - PlaneManager
   - MapBounds
+  - Terrain
   layers:
   - Default
   - TransparentFX
