@@ -19,4 +19,12 @@ public class PlaneManager : MonoBehaviour
 	{
 		transform.position += transform.forward * Time.deltaTime * Airspeed;
 	}
+
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("MapBounds"))
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }
