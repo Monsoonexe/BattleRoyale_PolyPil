@@ -10,13 +10,7 @@ public class FN_ItemManager : MonoBehaviour
 	public string ItemName;
 	public string ItemType;
 	public ItemRarityENUM ItemRarity;
-	public Color Common;
-	public Color Uncommon;
-	public Color Rare;
-	public Color Epic;
-	public Color Legendary;
-	public Color Mythic;
-	public string ItemAmount;
+	public int ItemAmount;
 
 	public string PickUpButtonText;
 
@@ -34,10 +28,13 @@ public class FN_ItemManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+        //get all TextMeshPro GUI references in children
 		TMPTexts = gameObject.GetComponentsInChildren<TextMeshProUGUI> ();
 
+        //for each element
 		for (int i = 0; i < TMPTexts.Length; i++)
 		{
+            //what is the element controlling
 			switch (TMPTexts [i].name)
 			{
 			case "_PickUpBtnText":
@@ -58,60 +55,37 @@ public class FN_ItemManager : MonoBehaviour
 			case "_txtRarity":
 				TMP_ItemRarity = TMPTexts [i];
 				TMP_ItemRarity.text = ItemRarity.ToString ();
-				Debug.Log (TMP_ItemRarity.text);
-				break;
+                ItemBackground.color = Color_Rarity.GetRarityColor(ItemRarity);
+                //Debug.Log (TMP_ItemRarity.text);
+                break;
 
 			case "_txtAmount":
 				PickUpButton = TMPTexts [i];
-				PickUpButton.text = ItemAmount;
+				PickUpButton.text = ItemAmount.ToString();
 				break;
 			}
 		}
 
-		switch (TMP_ItemRarity.text)
-		{
-		case "Common":
-			ItemBackground.color = Common;
-			break;
-
-		case "Uncommon":
-			ItemBackground.color = Uncommon;
-			break;
-
-		case "Rare":
-			ItemBackground.color = Rare;
-			break;
-
-		case "Epic":
-			ItemBackground.color = Epic;
-			break;
-
-		case "Legendary":
-			ItemBackground.color = Legendary;
-			break;
-
-		case "Mythic":
-			ItemBackground.color = Mythic;
-			break;
-		}
+        //do not show widget by default
 		ToolTipWidget.SetActive(false);
 	}
 
 	void OnTriggerEnter(Collider col)
 	{
-		if (col.transform.tag == "Player")
+		if (col.CompareTag("Player"))
 		{
 			ToolTipWidget.SetActive (true);
-			Debug.Log ("show");
+			Debug.Log ("Showing item: ", this.gameObject);
 		}
 	}
 
 	void OnTriggerExit(Collider col)
 	{
-		if (col.transform.tag == "Player")
-		{
+		if (col.CompareTag("Player"))
+
+        {
 			ToolTipWidget.SetActive (false);
-			Debug.Log ("hide");
+			Debug.Log ("Hiding item: ", this.gameObject);
 		}
 	}
 }

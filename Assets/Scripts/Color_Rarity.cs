@@ -9,7 +9,7 @@ public class Color_Rarity : MonoBehaviour
     public static readonly Color legendary = new Color(1.0f, 1.0f, 0.25f, 1.0f);//yellow
     public static readonly Color mythic = new Color(1.0f, 0.2f, 0.2f, 1.0f);//red
 
-    public static Color GetColor(ItemRarityENUM rarity)
+    public static Color GetRarityColor(ItemRarityENUM rarity)
     {
         Color rarityColor;
         switch (rarity)
