@@ -11,10 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27a81eb11ffd69043bf5371f68dc058d, type: 3}
   m_Name: Colors_Rarity_Asset
   m_EditorClassIdentifier: 
-  color_HealthHigh: {r: 0, g: 0, b: 0, a: 0}
-  color_HealthHalf: {r: 0, g: 0, b: 0, a: 0}
-  color_HealthLow: {r: 0, g: 0, b: 0, a: 0}
-  color_HealthDanger: {r: 0, g: 0, b: 0, a: 0}
-  limit_HealthHalf: 0.5
-  limit_HealthLow: 0.25
-  limit_HealthDanger: 0.1
+  common: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
+  uncommon: {r: 0.29792634, g: 0.6132076, b: 0.359723, a: 1}
+  rare: {r: 0.13679248, g: 0.45613903, b: 1, a: 1}
+  epic: {r: 0.84825575, g: 0.08018869, b: 1, a: 1}
+  legendary: {r: 0.9909949, g: 1, b: 0.23113209, a: 1}
+  mythic: {r: 1, g: 0.2028302, b: 0.20447156, a: 1}
