@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Name: Cool Sniper
   m_EditorClassIdentifier: 
   itemName: Cool Sniper
-  itemType: 4
+  itemType: 5
   itemRarity: 3
   quantity: 1
   buttonToPickUp: 70
   itemModel: {fileID: 0}
+  itemCondition: 1
   ammoType: 1
   weaponType: 3
   hands: 2
+  attachments: []
