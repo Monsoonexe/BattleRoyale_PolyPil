@@ -6,3 +6,4 @@ Free Assets from asset store:
 Modern Weapons
 Post Processing
 Free Islands Pack
+Text Mesh Pro

@@ -9,18 +9,14 @@ public class FN_ItemManager : MonoBehaviour
 	[Header("---Pick Up Item Tool Tip Parameters---")]
 	public string ItemName;
 	public string ItemType;
-	public enum ItemRarityEnum
-	{
-		Common, Uncommon, Rare, Epic, Legendary, Mythic
-	}
-	public ItemRarityEnum ItemRarity;
+	public ItemRarityENUM ItemRarity;
 	public Color Common;
 	public Color Uncommon;
 	public Color Rare;
 	public Color Epic;
 	public Color Legendary;
 	public Color Mythic;
-	public string ItemAmmount;
+	public string ItemAmount;
 
 	public string PickUpButtonText;
 
@@ -67,7 +63,7 @@ public class FN_ItemManager : MonoBehaviour
 
 			case "_txtAmount":
 				PickUpButton = TMPTexts [i];
-				PickUpButton.text = ItemAmmount;
+				PickUpButton.text = ItemAmount;
 				break;
 			}
 		}
