@@ -30,7 +30,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     //initial path finder
     private int spawnAttempts = 0;// used to track failures. app should pause or fail after this many fails
-    private readonly int spawnAttemptsUntilFailure = 15;//default of 15 tries
+    private readonly int spawnAttemptsUntilFailure = 10;//default of 15 tries
 
     //recursion for verifying path
     private int recursionAttempts = 0;//tracks recursion attempts
