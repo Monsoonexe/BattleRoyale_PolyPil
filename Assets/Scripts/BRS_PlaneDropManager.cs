@@ -19,7 +19,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
     private float planeFlightAltitude = 800.0f;
 
     //radius of spawn zone
-    private float spawnBoundsCircleRadius;
+    private float spawnBoundsCircleRadius = 100.0f;
 
     //was there a path successfully created
     private bool verifiedPath = false;
@@ -32,11 +32,15 @@ public class BRS_PlaneDropManager : MonoBehaviour
     private int spawnAttempts = 0;// used to track failures. app should pause or fail after this many fails
     private readonly int spawnAttemptsUntilFailure = 10;//default of 15 tries
 
-    //recursion for verifying path
-    private int recursionAttempts = 0;//tracks recursion attempts
-    private readonly int recursionAttemptsUntilFailure = 5;//give up after this many failed attempts
+    //recursion for raycast verifying path
+    private int raycastRecursionAttempts = 0;//tracks recursion attempts
+    private readonly int raycastRecursionAttemptsUntilFailure = 5;//give up after this many failed attempts
 
-	void Start ()
+    //recursion for verifying path
+    private int flightSetupRecursionAttempts = 0;//tracks recursion attempts
+    private readonly int flightSetupRecursionAttemptsUntilFailure = 10;//give up after this many failed attempts
+
+    void Start ()
 	{
         //error checking
         if(planeSpawnBounds == null)
@@ -55,8 +59,8 @@ public class BRS_PlaneDropManager : MonoBehaviour
         planeFlightAltitude = planeSpawnBounds.position.y > 0 ? planeSpawnBounds.position.y : 200f;//verifies that altitude is above 0
 
         //set radius of spawnBoundsCircleRadius
-        //TODO set default minimum value to protect from less than 0 values
-        spawnBoundsCircleRadius = planeSpawnBounds.localScale.x / 2;
+        //leave at default value if local scale is too small
+        spawnBoundsCircleRadius = planeSpawnBounds.localScale.x / 2 > spawnBoundsCircleRadius ? planeSpawnBounds.localScale.x / 2 : spawnBoundsCircleRadius;
 
         if (DEBUG)
         {
@@ -82,6 +86,14 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     private void SetupFlightPath()
     {
+        //don't go too deep
+        if(flightSetupRecursionAttempts++ > flightSetupRecursionAttemptsUntilFailure)
+        {
+            Debug.LogError("ERROR! Attempts at finding flight path: " + flightSetupRecursionAttempts + ". Try resizing plane spawn bounds, validating setup.");
+            Debug.Break();
+            return;
+        }
+
         //if(DEBUG) Debug.Log("Setting up Flight Path. Max Attempts: " + spawnAttemptsUntilFailure);
         RaycastHit raycastHitInfo;
 
@@ -172,9 +184,9 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     private bool RepeatingRayCast(bool success, Vector3 startPoint, GameObject endPoint)
     {
-        if (recursionAttempts++ > recursionAttemptsUntilFailure)
+        if (raycastRecursionAttempts++ > raycastRecursionAttemptsUntilFailure)
         {
-            recursionAttempts = 0;
+            raycastRecursionAttempts = 0;
             return false;
         }
         RaycastHit raycastHitInfo;
