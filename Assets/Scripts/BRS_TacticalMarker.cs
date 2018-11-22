@@ -5,16 +5,16 @@ public class BRS_TacticalMarker : MonoBehaviour
 	public GameObject TacticalMarker;
 
 	private float markerOffset;
-	private Camera FPCamera;
+	private Transform FPCameraTransform;
 	private float MinimapCamHeight;
-	private Ray ray;
-	private RaycastHit hit;
     private GameObject markerObject;
+
+    private readonly int tacticalMarkerPlaceDistanceLimit = 100;
 
 	// Use this for initialization
 	void Start ()
 	{
-		FPCamera = GetComponentInChildren<Camera>();
+		FPCameraTransform = GetComponentInChildren<Camera>().transform;
 		MinimapCamHeight = GameObject.FindGameObjectWithTag ("MiniMap Camera").transform.position.y;
 		markerOffset = MinimapCamHeight - 10.0f;
 	}
@@ -30,16 +30,16 @@ public class BRS_TacticalMarker : MonoBehaviour
 
 	private void PlaceMarker()
 	{
-		ray = new Ray(FPCamera.transform.position, FPCamera.transform.forward);
-		// Are we pointing at something in the world?
-		if (Physics.Raycast(ray, out hit))
+        RaycastHit hitInfo;
+        // Are we pointing at something in the world?
+        if (Physics.Raycast(FPCameraTransform.position, FPCameraTransform.forward, out hitInfo, tacticalMarkerPlaceDistanceLimit))
 		{
-            Vector3 markerLocation = new Vector3(hit.point.x, markerOffset, hit.point.z);
+            Vector3 markerLocation = new Vector3(hitInfo.point.x, markerOffset, hitInfo.point.z);
             if (markerObject != null)
             {
                 Destroy(markerObject);
             }
-            markerObject = Instantiate(TacticalMarker, markerLocation, Quaternion.identity, null);
+            markerObject = Instantiate(TacticalMarker, markerLocation, Quaternion.identity);
             
 		}
 	}
