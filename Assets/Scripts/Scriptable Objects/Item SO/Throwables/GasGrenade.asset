@@ -11,14 +11,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae6eefba1d833b42b053396743aedb0, type: 3}
   m_Name: GasGrenade
   m_EditorClassIdentifier: 
-  itemName: Gas Grenade
+  itemName: Smoke Grenade
   itemType: 4
   itemRarity: 2
   quantity: 1
+  stackQuantity: 5
   buttonToPickUp: 70
-  itemModel: {fileID: 0}
+  itemIcon: {fileID: 0}
+  itemModel: {fileID: 1689780366104618, guid: bea5b1a1b328eeb4884c10a4c7a64424, type: 2}
   itemCondition: 1
-  throwType: 2
+  throwType: 3
   impactType: 1
   throwDistance: 3
   cookTime: 3
