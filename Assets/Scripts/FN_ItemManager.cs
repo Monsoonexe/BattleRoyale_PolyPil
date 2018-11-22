@@ -38,11 +38,8 @@ public class FN_ItemManager : MonoBehaviour
         ItemAmount = scriptableObject_Item.quantity;
         PickUpButtonText = scriptableObject_Item.buttonToPickUp;
 
-        //instantiate item model
-        this.itemModel = Instantiate(scriptableObject_Item.itemModel, itemModelHolder.transform.position, Quaternion.identity, itemModelHolder.transform);
-        //model matches holder's position
-        itemModel.transform.rotation = itemModelHolder.transform.rotation;
-
+        //instantiate item model. rotation matches that of parent
+        this.itemModel = Instantiate(scriptableObject_Item.itemModel, itemModelHolder.transform.position, itemModelHolder.transform.rotation, itemModelHolder.transform);
     }
 
 	// Use this for initialization
@@ -93,29 +90,15 @@ public class FN_ItemManager : MonoBehaviour
 		ToolTipWidget.SetActive(false);
 	}
 
-	void OnTriggerEnter(Collider col)
-	{
-        //TODO check if player is looking at object
-		if (col.CompareTag("Player"))
-		{
-			ToolTipWidget.SetActive (true);
-			Debug.Log ("Showing item: ", this.gameObject);
-		}
-	}
-
-    private void OnTriggerStay(Collider other)
+    public GameObject GetItemModel()
     {
-        //TODO detect if player still looking at or away from object
-        //player should still stand close to item but not see ToolTip if not looking directly at
+        return this.itemModel;
     }
 
-    void OnTriggerExit(Collider col)
-	{
-		if (col.CompareTag("Player"))
+    public void ToggleModelVisible(bool _isActive)
+    {
+        ToolTipWidget.SetActive(_isActive);
+        //Debug.Log("Show item " + ItemName + ": " + _isActive);
 
-        {
-			ToolTipWidget.SetActive (false);
-			Debug.Log ("Hiding item: ", this.gameObject);
-		}
-	}
+    }
 }
