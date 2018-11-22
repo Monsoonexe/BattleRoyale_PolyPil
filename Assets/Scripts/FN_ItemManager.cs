@@ -47,6 +47,7 @@ public class FN_ItemManager : MonoBehaviour
 	{
         //init from scriptable object if provided
         if (scriptableObject_Item != null) InitFromScriptableObject();
+        else Debug.LogError("Error! No Scriptable Object Loaded. What am I???");
 
         //get all TextMeshPro GUI references in children
         TMPTexts = gameObject.GetComponentsInChildren<TextMeshProUGUI> ();
