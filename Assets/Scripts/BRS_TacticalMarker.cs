@@ -9,7 +9,7 @@ public class BRS_TacticalMarker : MonoBehaviour
 	private float MinimapCamHeight;
     private GameObject markerObject;
 
-    private readonly int tacticalMarkerPlaceDistanceLimit = 100;
+    private readonly int tacticalMarkerPlaceDistanceLimit = 300;
 
 	// Use this for initialization
 	void Start ()
