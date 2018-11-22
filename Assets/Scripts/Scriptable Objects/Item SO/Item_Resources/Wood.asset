@@ -11,11 +11,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50feacb74bca2045b55b5a844fdc458, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
-  itemName: 'Resource: '
+  itemName: 'Resource: Wood'
   itemType: 3
   itemRarity: 0
   quantity: 1
-  stackQuantity: 0
+  stackQuantity: 100
   buttonToPickUp: 70
   itemIcon: {fileID: 0}
   itemModel: {fileID: 0}

@@ -7,7 +7,7 @@ public class Resource : Item {
     private void Awake()
     {
         this.itemType = ItemTypeENUM.resource;
-        this.itemName += "Resource: ";
+        this.itemName = "Resource: ";
         this.stackQuantity = 100;
     }
 }
