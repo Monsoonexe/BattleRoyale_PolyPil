@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 224731941225547476}
   - component: {fileID: 222700844817403784}
   - component: {fileID: 114136966649031018}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: _txtPickUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224054495260023994}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Content_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224174236466060870}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Content_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 224322271140661850}
   - component: {fileID: 222860738141408594}
   - component: {fileID: 114896564968848738}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: _txtType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 224971613686180992}
   - component: {fileID: 222273554475424696}
   - component: {fileID: 114152880074293768}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Left Background Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 224196788688950878}
   - component: {fileID: 222752151779747338}
   - component: {fileID: 114723021351887636}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: _txtAmount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 224859156424150314}
   - component: {fileID: 222587895983712010}
   - component: {fileID: 114536794087152170}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Right Background Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 224054029704241302}
   - component: {fileID: 222373900363636106}
   - component: {fileID: 114999666612415810}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: _txtSpacer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,7 +166,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4636266438428732}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WUI Offset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 224950677873079442}
   - component: {fileID: 222624978787302966}
   - component: {fileID: 114832062693379126}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: _txtItemName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4511491852364610}
   - component: {fileID: 114220119965317242}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: UI Offset (Base)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 224247450137271850}
   - component: {fileID: 222498542392914978}
   - component: {fileID: 114716444365019416}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: _txtAmountX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,9 +251,9 @@ GameObject:
   - component: {fileID: 4259240890364378}
   - component: {fileID: 114393054343863098}
   - component: {fileID: 135427206505302872}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FN_PickUp Item
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 223206921968629314}
   - component: {fileID: 114870637037647174}
   - component: {fileID: 114644901235430678}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: FN_Item Pickup (WUI)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,7 +286,7 @@ GameObject:
   - component: {fileID: 224733933888990570}
   - component: {fileID: 222426412416912096}
   - component: {fileID: 114430868228591610}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: _txtRarity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 224715659321265158}
   - component: {fileID: 222330158337401546}
   - component: {fileID: 114086447835678082}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: _PickUpBtnText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 224038426185811440}
   - component: {fileID: 222966002700677482}
   - component: {fileID: 114378528361226138}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: RawImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1513,7 +1513,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!222 &222273554475424696
 CanvasRenderer:
