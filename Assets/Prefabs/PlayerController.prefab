@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4784503444239274}
   - component: {fileID: 33390295124808006}
   - component: {fileID: 23264153042272796}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 33088484674821408}
   - component: {fileID: 23856966284693678}
   - component: {fileID: 136664438703758754}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 54053143549845786}
   - component: {fileID: 82456282939202388}
   - component: {fileID: 114897435443365382}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PlayerController
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1760171480275810}
   m_LocalRotation: {x: 0, y: 0.36162448, z: 0, w: 0.9323238}
-  m_LocalPosition: {x: 718.28, y: 87.6, z: 742.92}
+  m_LocalPosition: {x: 1253.31, y: 56.24, z: -556.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4358393766350686}

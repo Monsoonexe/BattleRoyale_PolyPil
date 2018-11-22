@@ -2,7 +2,7 @@
 
 public class LookAtCamera : MonoBehaviour
 {
-	public Transform target;
+	private Transform target;
 
 	void Start()
 	{
@@ -11,6 +11,6 @@ public class LookAtCamera : MonoBehaviour
 
 	void Update()
 	{
-		this.transform.LookAt (new Vector3(target.position.x, this.transform.position.y, target.position.z));
+		this.transform.LookAt (new Vector3(target.position.x, target.position.y, target.position.z));
 	}
 }
