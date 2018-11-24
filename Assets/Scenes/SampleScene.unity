@@ -426,18 +426,13 @@ Transform:
   - {fileID: 1542477353}
   - {fileID: 1209665042}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &233232766 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4040280970808236, guid: a6e35e8f2a41eae459f4585a9ffadcd9,
     type: 2}
   m_PrefabInternal: {fileID: 2106513638}
---- !u!1 &273808354 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1760171480275810, guid: 2753e3c2a3bddc342a2fd8dd859bdc3d,
-    type: 2}
-  m_PrefabInternal: {fileID: 1338605266}
 --- !u!4 &282176643 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 9485b0c79d11e2e4d0007da98d76c639,
@@ -459,7 +454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &294371288
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -546,7 +541,7 @@ Transform:
   - {fileID: 854064359}
   - {fileID: 1213784518}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &470784842
 Prefab:
@@ -767,7 +762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3666a97639e6d8d4f91860ecf2149ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  miniMapTarget: {fileID: 273808354}
+  miniMapTarget: {fileID: 0}
 --- !u!20 &534669904
 Camera:
   m_ObjectHideFlags: 0
@@ -821,6 +816,12 @@ Transform:
   m_Father: {fileID: 928156852}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &567795628 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114299198449833896, guid: a6e35e8f2a41eae459f4585a9ffadcd9,
+    type: 2}
+  m_PrefabInternal: {fileID: 2106513638}
+  m_Script: {fileID: 11500000, guid: 51bdf48d37f3fb74384d3fa60573bd85, type: 3}
 --- !u!1 &618364284
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,7 +867,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &688639024
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -922,6 +923,72 @@ Transform:
   m_Father: {fileID: 854064359}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &720669288
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114080687751938896, guid: 07b09818548fb4d41bfa95b56e1827cb,
+        type: 2}
+      propertyPath: planeDropManager
+      value: 
+      objectReference: {fileID: 1209665043}
+    - target: {fileID: 114080687751938896, guid: 07b09818548fb4d41bfa95b56e1827cb,
+        type: 2}
+      propertyPath: zoneWall
+      value: 
+      objectReference: {fileID: 1101259889}
+    - target: {fileID: 114080687751938896, guid: 07b09818548fb4d41bfa95b56e1827cb,
+        type: 2}
+      propertyPath: zoneWallChangeCircle
+      value: 
+      objectReference: {fileID: 567795628}
+    - target: {fileID: 114080687751938896, guid: 07b09818548fb4d41bfa95b56e1827cb,
+        type: 2}
+      propertyPath: StartInPlane
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1680688628067676, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &854064358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,6 +1163,11 @@ Transform:
   m_Father: {fileID: 854064359}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1101259889 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1156843247285388, guid: a6e35e8f2a41eae459f4585a9ffadcd9,
+    type: 2}
+  m_PrefabInternal: {fileID: 2106513638}
 --- !u!1001 &1178167515
 Prefab:
   m_ObjectHideFlags: 0
@@ -1150,59 +1222,17 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9485b0c79d11e2e4d0007da98d76c639, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &1209665041
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1209665042}
-  - component: {fileID: 1209665043}
-  m_Layer: 0
-  m_Name: PlaneDrop_Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1209665042
+--- !u!4 &1209665042 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1209665041}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 223957393}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1209665043
+  m_CorrespondingSourceObject: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008767397}
+--- !u!114 &1209665043 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1209665041}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008767397}
   m_Script: {fileID: 11500000, guid: d246be08b1c730e44aabf72f8ce96b38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  planeSpawnBounds: {fileID: 1459091275}
-  acceptableDropZones:
-  - {fileID: 486764650}
-  - {fileID: 1593942300}
-  - {fileID: 2140248226}
-  - {fileID: 52432632}
-  - {fileID: 1225333941}
-  BRS_PlaneSpawn: {fileID: 1535088515930718, guid: 561ed58d5b5b7d3428a78123e277914e,
-    type: 2}
-  endpointMarker: {fileID: 1776112423833054, guid: fdda0326e7f6bf047bfd5488c1f49bcf,
-    type: 2}
-  failedPathAltitudeIncrementAmount: 75
-  DEBUG: 0
 --- !u!1 &1213784517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1355,7 +1385,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4932946021857126, guid: 2753e3c2a3bddc342a2fd8dd859bdc3d, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2753e3c2a3bddc342a2fd8dd859bdc3d, type: 2}
@@ -1539,7 +1569,7 @@ RectTransform:
   - {fileID: 2002457209}
   - {fileID: 193821255}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1555,7 +1585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1542477353}
   m_Layer: 0
-  m_Name: DropZones
+  m_Name: DropZones_Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1595,7 +1625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &1591135199
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -1857,6 +1887,83 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224396730936630332, guid: b695382be042f624c97286085c218afb,
     type: 2}
   m_PrefabInternal: {fileID: 470784842}
+--- !u!1001 &2008767397
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 223957393}
+    m_Modifications:
+    - target: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997161275527798, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
+        type: 2}
+      propertyPath: planeSpawnBounds
+      value: 
+      objectReference: {fileID: 1459091275}
+    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
+        type: 2}
+      propertyPath: playerDropZones.Array.data[0]
+      value: 
+      objectReference: {fileID: 486764650}
+    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
+        type: 2}
+      propertyPath: playerDropZones.Array.data[1]
+      value: 
+      objectReference: {fileID: 1593942300}
+    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
+        type: 2}
+      propertyPath: playerDropZones.Array.data[2]
+      value: 
+      objectReference: {fileID: 2140248226}
+    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
+        type: 2}
+      propertyPath: playerDropZones.Array.data[3]
+      value: 
+      objectReference: {fileID: 52432632}
+    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
+        type: 2}
+      propertyPath: playerDropZones.Array.data[4]
+      value: 
+      objectReference: {fileID: 1225333941}
+    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
+        type: 2}
+      propertyPath: DEBUG
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &2035710592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1873,7 +1980,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &2035710593
 TerrainCollider:
   m_ObjectHideFlags: 0

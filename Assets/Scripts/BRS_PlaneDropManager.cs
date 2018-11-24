@@ -102,7 +102,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         if (VerifyReferences())
         {
             //set possible start and end points
-            SetupFlightPath();
+            SetupFlightPath(DropTypeENUM.PLAYER);
         }
         else
         {
@@ -123,10 +123,12 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     }
 
-    private void SetupFlightPath()
+    public void SetupFlightPath(DropTypeENUM dropType)
     {
         bool endpointHit = false;
         bool flightPathThroughLZ = false;
+
+        GameObject[] acceptableDropZones = SetAcceptableDropZones(dropType);
 
         //find a start point
         planeStartPoint = GetRandomPointOnCircle();
@@ -149,7 +151,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
             if (DEBUG) endpointMarker.name = "Endpoint Marker " + unsuccessfulPasses + "." + endPointsFound;
 
             //test if flight path goes through LZ
-            if (TestRaycastThroughDropZone(planeStartPoint, endpointMarker.transform.position, playerDropZones))
+            if (TestRaycastThroughDropZone(planeStartPoint, endpointMarker.transform.position, acceptableDropZones))
             {
                 flightPathThroughLZ = true;
             }
@@ -200,7 +202,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
             //raise altitude and try again
             planeFlightAltitude += failedPathAltitudeIncrementAmount;
             //try again
-            SetupFlightPath();
+            SetupFlightPath(dropType);
         }
         else
         {
