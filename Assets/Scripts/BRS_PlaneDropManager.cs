@@ -7,7 +7,10 @@ public class BRS_PlaneDropManager : MonoBehaviour
     //public GameObject EndPointBall;
     [Header("Map Settings")]
     public Transform planeSpawnBounds;//where can the plane start and stop?
-    public GameObject[] acceptableDropZones;//how big should the zone be that the plane flies through
+    public GameObject[] playerDropZones;//how big should the zone be that the plane flies through
+    public GameObject[] supplyDropZones;//list containing all areas the player can drop into
+
+
     [Header("Plane Settings")]
     public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
     public GameObject endpointMarker;//marks beginnning and end points for debugging purposes
@@ -30,19 +33,25 @@ public class BRS_PlaneDropManager : MonoBehaviour
     private int unsuccessfulPasses = 0;
     private readonly int flightPathChecksUntilFailure = 12;
 
-    void Start()
+    //stuff to pass on to plane when deployed
+    private GameObject targetDropZone;
+    private GameObject[] planeCargo;
+    private int planeFlightSpeed = 200;
+
+    private bool VerifyReferences()
     {
-        //error checking
         if (planeSpawnBounds == null)
         {
             Debug.LogError("ERROR: plane spanw bounds not set!");
             Debug.Break();
+            return false;
         }
 
-        if (acceptableDropZones.Length < 1)
+        if (playerDropZones.Length < 1)
         {
             Debug.LogError("ERROR: No Acceptable Drop Zones in list!");
             Debug.Break();
+            return false;
         }
 
         //set and check altitude
@@ -57,9 +66,48 @@ public class BRS_PlaneDropManager : MonoBehaviour
             //make sure endpoint prefab is visible
             endpointMarker.GetComponent<MeshRenderer>().enabled = true;
         }
+        return true;
+    }
 
-        //set possible start and end points
-        SetupFlightPath();
+    private GameObject[] SetAcceptableDropZones(DropTypeENUM dropZoneType)
+    {
+
+        switch (dropZoneType)
+        {
+            case DropTypeENUM.PLAYER:
+                return playerDropZones;
+            case DropTypeENUM.SUPPLY:
+                return supplyDropZones;
+            default:
+                Debug.LogError("ERROR! Default hit");
+                Debug.Break();
+                return null;
+        }
+
+    }
+
+    private void DestroyMarkerObjects()
+    {
+        //destorys each marker that was used.
+        //warning! DESTROYS ALL CHILDREN!
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    void Start()
+    {
+        //error checking
+        if (VerifyReferences())
+        {
+            //set possible start and end points
+            SetupFlightPath();
+        }
+        else
+        {
+            Debug.Log("Failed to set up references.");
+        }
     }
 
     private Vector3 GetRandomPointOnCircle()
@@ -101,7 +149,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
             if (DEBUG) endpointMarker.name = "Endpoint Marker " + unsuccessfulPasses + "." + endPointsFound;
 
             //test if flight path goes through LZ
-            if (TestRaycastThroughDropZone(planeStartPoint, endpointMarker.transform.position))
+            if (TestRaycastThroughDropZone(planeStartPoint, endpointMarker.transform.position, playerDropZones))
             {
                 flightPathThroughLZ = true;
             }
@@ -123,10 +171,12 @@ public class BRS_PlaneDropManager : MonoBehaviour
             //does the flight unobstructed and through a drop zone
             if(endpointHit && flightPathThroughLZ)
             {
+                //SUCCESSS!!!!!!!
                 ToggleDropZones(true);//turn LZ on
                 SpawnPlane();
+                if(!DEBUG) DestroyMarkerObjects();
                 verifiedPath = true;
-                break;
+                return;
             }
             else
             {
@@ -163,22 +213,17 @@ public class BRS_PlaneDropManager : MonoBehaviour
     private void SpawnPlane()
     {
         //create this plane in the world at this position, with no rotation
-        GameObject plane = Instantiate(BRS_PlaneSpawn, planeStartPoint, Quaternion.identity);
+        GameObject plane = Instantiate(BRS_PlaneSpawn, planeStartPoint, Quaternion.identity);//do not set plane to be child of this object!
         plane.transform.LookAt(planeEndPoint);//point plane towards endpoint
-        //seppuku! this object is no longer needed -- kill children as well
-        if (DEBUG)
-        {
+        //get plane manager
+        PlaneManager planeManager = plane.GetComponent<PlaneManager>();
+        planeManager.InitPlane(planeCargo, targetDropZone, planeFlightSpeed);
 
-            this.enabled = false;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
     }
 
-    private bool TestRaycastThroughDropZone(Vector3 startPoint, Vector3 targetObject)
+    private bool TestRaycastThroughDropZone(Vector3 startPoint, Vector3 targetObject, GameObject[] acceptableDropZones)
     {
+
         //turn drop zone colliders on
         ToggleDropZones(true);//turn LZ on
         //did the raycast go through a drop zone?
@@ -193,7 +238,8 @@ public class BRS_PlaneDropManager : MonoBehaviour
             {
                 if (raycastHitInfo.collider.gameObject == acceptableDropZones[i])//if the game object that was hit is inside this list of good zones
                 {
-                    if(DEBUG) Debug.Log("Landing Zone: " + raycastHitInfo.collider.gameObject.name);
+                    if(DEBUG) Debug.Log("Passing Through Drop Zone: " + raycastHitInfo.collider.gameObject.name);
+                    targetDropZone = acceptableDropZones[i];//this zone will be passed to the plane, so it knows when it hits said zone
                     raycastThroughDropZone = true;//booyah!
                     //if (DEBUG) Instantiate(debugEndpointMarker, raycastHitInfo.point, Quaternion.identity, this.transform);
                     break;//break out of for loop looking through gameObjects in list
@@ -203,7 +249,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         }//end if
         else
         {
-            Debug.LogError("ERROR! Raycast missed target LZ");
+            //Debug.LogError("ERROR! Raycast missed target LZ");
         }
 
         return raycastThroughDropZone;
@@ -211,7 +257,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     private bool TestRaycastHitEndPoint(Vector3 startPoint, GameObject targetObject)
     {
-        //turn drop zones off so they don't interfere with raycast
+        //turn all drop zones off so they don't interfere with raycast
         ToggleDropZones(false);//turn LZ off
 
         //did the raycast hit the endpoint unobstructed by terrain or obstacles?
@@ -219,7 +265,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         //RaycastHit holds info about raycast
         RaycastHit raycastHitInfo;
         //if something was hit...
-        if(Physics.Raycast(startPoint, targetObject.transform.position - startPoint, out raycastHitInfo, spawnBoundsCircleRadius * 2))
+        if (Physics.Raycast(startPoint, targetObject.transform.position - startPoint, out raycastHitInfo, spawnBoundsCircleRadius * 2))
         {
             if (DEBUG) Debug.Log("Object Hit: " + raycastHitInfo.collider.gameObject.name);
             if (raycastHitInfo.collider.gameObject == targetObject)//were we trying to hit this thing?
@@ -230,19 +276,51 @@ public class BRS_PlaneDropManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("ERROR! Raycast missed it's target: " + targetObject);
+            //Debug.LogError("ERROR! Raycast missed it's target: " + targetObject);
         }
         return raycastHitEndpoint;
     }
 
+    //info to pass onto plane when it loads
+    public void LoadPlaneWithCargo(GameObject[] cargoManifest)
+    {
+        planeCargo = cargoManifest;
+    }
+
+    public void SetFlightSpeed(int desiredFlightSpeed)
+    {
+        planeFlightSpeed = desiredFlightSpeed > 0 ? desiredFlightSpeed : planeFlightSpeed;
+    }
+
+    //toggle drop zones on and off
     public void ToggleDropZones(bool active)
     {
+        ToggleDropZones(playerDropZones, active);
+        ToggleDropZones(supplyDropZones, active);
+    }
+    public void ToggleDropZones(GameObject[] acceptableDropZones, bool active)
+    {
         //look at each dropZone in our list
-        foreach(GameObject dropZone in acceptableDropZones)
+        foreach (GameObject dropZone in acceptableDropZones)
         {
             //set it active or inactive
             dropZone.GetComponent<CapsuleCollider>().enabled = active;
         }
-        if (DEBUG) Debug.Log("All Drop Zones Active: " + active);
+        if (DEBUG)
+        {
+            if(acceptableDropZones == playerDropZones)
+            {
+                Debug.Log("PlayerDropZones" + active);
+            }
+            else if(acceptableDropZones == supplyDropZones)
+            {
+                if (acceptableDropZones == playerDropZones)
+                {
+                    Debug.Log("SupplyDropZones" + active);
+                }
+                
+            }
+            
+        }
     }
 }
