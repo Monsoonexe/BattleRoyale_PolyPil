@@ -1,13 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlaneManager : MonoBehaviour
 {
-	public float Airspeed = 100f;
+	public int airspeed = 100;
+    public GameObject targetDropZone;
+    public GameObject[] cargo;
+    public bool hasDroppedCargo = false;
 
-	// Use this for initialization
-	void Start ()
+
+
+    //public UnityStandardAssets.Characters.FirstPerson.FirstPersonController fpsController;
+
+    public void InitPlane(GameObject[] incomingCargo, GameObject incomingTargetDropZone, int incomingAirSpeed = 100)
+    {
+        this.cargo = incomingCargo;
+        this.targetDropZone = incomingTargetDropZone;
+        this.airspeed = incomingAirSpeed;
+    }
+
+    // Use this for initialization
+    void Start ()
 	{
         //play sound
         //randomly select plane model
@@ -17,7 +29,7 @@ public class PlaneManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		transform.position += transform.forward * Time.deltaTime * Airspeed;
+		transform.position += transform.forward * Time.deltaTime * airspeed;
 	}
 
     private void OnTriggerExit(Collider collider)
