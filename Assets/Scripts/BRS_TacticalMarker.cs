@@ -90,6 +90,8 @@ public class BRS_TacticalMarker : MonoBehaviour
             //get the item's itemManager
             FN_ItemManager itemManager = triggerVolume.gameObject.GetComponent<FN_ItemManager>();
 
+            //TODO Restrict code to not fire raycasts 30x a second. This can get expensive if there are a lot of items around.
+            //set the visibility to whether or not the player is looking at the model.
             itemManager.ToggleModelVisible(PlayerIsLookingAtItem(itemManager.GetItemModel()));
             
 
