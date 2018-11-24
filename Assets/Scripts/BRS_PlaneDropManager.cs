@@ -101,8 +101,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         //error checking
         if (VerifyReferences())
         {
-            //set possible start and end points
-            SetupFlightPath(DropTypeENUM.PLAYER);
+            if (DEBUG) Debug.Log("Everything looks good here.");
         }
         else
         {

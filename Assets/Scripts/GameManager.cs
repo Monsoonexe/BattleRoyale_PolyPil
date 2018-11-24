@@ -23,10 +23,10 @@ public class GameManager : MonoBehaviour {
     {
         //TODO
         //ERROR! THIS BORKS EVERYTHING UP!!!
-        //planeDropManager.LoadPlaneWithCargo(players);
-        //planeDropManager.SetFlightSpeed(200);
-        //planeDropManager.SetupFlightPath(DropTypeENUM.PLAYER);
-        
+        planeDropManager.LoadPlaneWithCargo(players);
+        planeDropManager.SetFlightSpeed(200);
+        planeDropManager.SetupFlightPath(DropTypeENUM.PLAYER);
+
 
     }
 
@@ -36,17 +36,18 @@ public class GameManager : MonoBehaviour {
         //populate loot
         //determine mission
         //spawn certain enemies and specific locations
-        if (StartInPlane)
-        {
-            DeployPlayersInPlane();
-        }
+        
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (StartInPlane)
+        {
+            DeployPlayersInPlane();
+            StartInPlane = false;
+        }
+    }
 
     private void VerifyReferences()
     {
