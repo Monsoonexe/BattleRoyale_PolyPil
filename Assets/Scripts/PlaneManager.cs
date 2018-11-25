@@ -32,6 +32,7 @@ public class PlaneManager : MonoBehaviour
         return playerIsOnBoard;
     }
 
+    //this is basically the constructor class
     public void InitPlane(GameObject incomingTargetDropZone, GameObject[] incomingCargo, int incomingAirSpeed = 100)
     {
         if (DEBUG) Debug.Log("This plane heading towards DZ: " + incomingTargetDropZone);
@@ -39,6 +40,7 @@ public class PlaneManager : MonoBehaviour
         this.targetDropZone = incomingTargetDropZone;
         this.airspeed = incomingAirSpeed;
         planeCameraHolder.SetActive(CheckIfPlayerOnBoard());
+        //gives this plane a name for tracking purposes
         this.gameObject.name = "Plane Number: " + ++planeCounter;
 
     }

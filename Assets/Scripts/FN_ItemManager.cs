@@ -36,10 +36,15 @@ public class FN_ItemManager : MonoBehaviour
         ItemType = scriptableObject_Item.itemType;
         ItemRarity = scriptableObject_Item.itemRarity;
         ItemAmount = scriptableObject_Item.quantity;
-        PickUpButtonText = scriptableObject_Item.buttonToPickUp;
 
         //instantiate item model. rotation matches that of parent
         this.itemModel = Instantiate(scriptableObject_Item.itemModel, itemModelHolder.transform.position, itemModelHolder.transform.rotation, itemModelHolder.transform);
+    }
+
+    public bool CompareModel(GameObject otherModel)
+    {
+        if (this.itemModel == otherModel) return true;
+        return false;
     }
 
 	// Use this for initialization
