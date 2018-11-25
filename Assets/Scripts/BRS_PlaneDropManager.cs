@@ -10,7 +10,6 @@ public class BRS_PlaneDropManager : MonoBehaviour
     public GameObject[] playerDropZones;//how big should the zone be that the plane flies through
     public GameObject[] supplyDropZones;//list containing all areas the player can drop into
 
-
     [Header("Plane Settings")]
     public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
     public GameObject endpointMarkerPrefab;//marks beginnning and end points for debugging purposes
@@ -250,7 +249,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         plane.transform.LookAt(planeEndPoint);//point plane towards endpoint
         //get plane manager
         PlaneManager planeManager = plane.GetComponent<PlaneManager>();
-        planeManager.InitPlane(planeCargo, targetDropZone, planeFlightSpeed);
+        planeManager.InitPlane(targetDropZone, planeCargo, planeFlightSpeed);
 
     }
 
