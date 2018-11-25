@@ -309,4 +309,4 @@ MonoBehaviour:
   cargo: []
   hasDroppedCargo: 0
   planeCameraHolder: {fileID: 1728888186039676}
-  DEBUG: 1
+  DEBUG: 0
