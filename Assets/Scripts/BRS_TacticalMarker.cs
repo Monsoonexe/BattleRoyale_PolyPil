@@ -52,13 +52,6 @@ public class BRS_TacticalMarker : MonoBehaviour
                 itemManager.ToggleModelVisible(itemManager.CompareModel(GOPlayerIsCurrentlyLookingAt));
 
             }
-
-
-            if (interactableObjectsWithinRange.Contains(GOPlayerIsCurrentlyLookingAt))
-            {
-                FN_ItemManager itemManager = GOPlayerIsCurrentlyLookingAt.gameObject.GetComponent<FN_ItemManager>();
-
-            }
         }
     }
 
