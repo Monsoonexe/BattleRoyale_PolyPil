@@ -13,15 +13,20 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     [Header("Plane Settings")]
     public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
-    public GameObject endpointMarker;//marks beginnning and end points for debugging purposes
+    public GameObject endpointMarkerPrefab;//marks beginnning and end points for debugging purposes
 
-    public int failedPathAltitudeIncrementAmount = 50;//if the flight path fails, raise the altitude by this much before trying again
+    public int planeSpeed_PlayerDrop = 200;
+    public int planeSpeed_SupplyDrop = 300;
+
     public bool DEBUG = true;//if true, prints debug statements
 
     private bool verifiedPath = false;
+    private GameObject[] acceptableDropZones;
 
     //how high does the plane fly?
     private float planeFlightAltitude = 800.0f;
+
+    private readonly int failedPathAltitudeIncrementAmount = 50;//if the flight path fails, raise the altitude by this much before trying again
 
     //radius of spawn zone
     private float spawnBoundsCircleRadius = 100.0f;
@@ -29,6 +34,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
     //start and end points for plane to fly through
     private Vector3 planeStartPoint;
     private Vector3 planeEndPoint;
+    private GameObject endpointMarker;
 
     private int unsuccessfulPasses = 0;
     private readonly int flightPathChecksUntilFailure = 12;
@@ -49,7 +55,14 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
         if (playerDropZones.Length < 1)
         {
-            Debug.LogError("ERROR: No Acceptable Drop Zones in list!");
+            Debug.LogError("ERROR: No Player Drop Zones in list!");
+            Debug.Break();
+            return false;
+        }
+
+        if (supplyDropZones.Length < 1)
+        {
+            Debug.LogError("ERROR: No Supply Drop Zones in list!");
             Debug.Break();
             return false;
         }
@@ -64,24 +77,33 @@ public class BRS_PlaneDropManager : MonoBehaviour
         if (DEBUG)
         {
             //make sure endpoint prefab is visible
-            endpointMarker.GetComponent<MeshRenderer>().enabled = true;
+            endpointMarkerPrefab.GetComponent<MeshRenderer>().enabled = true;
+        }
+        else
+        {
+            endpointMarkerPrefab.GetComponent<MeshRenderer>().enabled = false;
         }
         return true;
     }
 
-    private GameObject[] SetAcceptableDropZones(DropTypeENUM dropZoneType)
+    private void ConfigureFlightType(DropTypeENUM dropZoneType)
     {
-
         switch (dropZoneType)
         {
             case DropTypeENUM.PLAYER:
-                return playerDropZones;
+                acceptableDropZones =  playerDropZones;
+                planeFlightSpeed = planeSpeed_PlayerDrop;
+                break;
+
             case DropTypeENUM.SUPPLY:
-                return supplyDropZones;
+                acceptableDropZones = supplyDropZones;
+                planeFlightSpeed = planeSpeed_SupplyDrop;
+                break;
+
             default:
                 Debug.LogError("ERROR! Default hit");
                 Debug.Break();
-                return null;
+                break;
         }
 
     }
@@ -122,19 +144,29 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     }
 
-    public void SetupFlightPath(DropTypeENUM dropType)
+    public void InitPlaneDrop(DropTypeENUM dropType)
+    {
+        ConfigureFlightType(dropType);
+        SetupFlightPath();
+    }
+
+    public void InitPlaneDrop(DropTypeENUM dropType, GameObject[] incomingCargo)
+    {
+        planeCargo = incomingCargo;
+        InitPlaneDrop(dropType);
+    }
+
+    private void SetupFlightPath()
     {
         bool endpointHit = false;
         bool flightPathThroughLZ = false;
-
-        GameObject[] acceptableDropZones = SetAcceptableDropZones(dropType);
 
         //find a start point
         planeStartPoint = GetRandomPointOnCircle();
         //spawn debugger object. this object is the parent, so both will be destroyed
         if (DEBUG)
         {
-            GameObject startMark = Instantiate(endpointMarker, planeStartPoint, Quaternion.identity, this.transform);
+            GameObject startMark = Instantiate(endpointMarkerPrefab, planeStartPoint, Quaternion.identity, this.transform);
             startMark.name = "StartMarker: " + unsuccessfulPasses;
 
         }
@@ -146,7 +178,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
             //get end point on circle
             planeEndPoint = GetRandomPointOnCircle();
             //create a new endpoint marker at that location
-            endpointMarker = Instantiate(endpointMarker, planeEndPoint, Quaternion.identity, this.transform);
+            endpointMarker = Instantiate(endpointMarkerPrefab, planeEndPoint, Quaternion.identity, this.transform);
             if (DEBUG) endpointMarker.name = "Endpoint Marker " + unsuccessfulPasses + "." + endPointsFound;
 
             //test if flight path goes through LZ
@@ -201,7 +233,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
             //raise altitude and try again
             planeFlightAltitude += failedPathAltitudeIncrementAmount;
             //try again
-            SetupFlightPath(dropType);
+            SetupFlightPath();
         }
         else
         {
@@ -282,23 +314,13 @@ public class BRS_PlaneDropManager : MonoBehaviour
         return raycastHitEndpoint;
     }
 
-    //info to pass onto plane when it loads
-    public void LoadPlaneWithCargo(GameObject[] cargoManifest)
-    {
-        planeCargo = cargoManifest;
-    }
-
-    public void SetFlightSpeed(int desiredFlightSpeed)
-    {
-        planeFlightSpeed = desiredFlightSpeed > 0 ? desiredFlightSpeed : planeFlightSpeed;
-    }
-
     //toggle drop zones on and off
     public void ToggleDropZones(bool active)
     {
         ToggleDropZones(playerDropZones, active);
         ToggleDropZones(supplyDropZones, active);
     }
+
     public void ToggleDropZones(GameObject[] acceptableDropZones, bool active)
     {
         //look at each dropZone in our list

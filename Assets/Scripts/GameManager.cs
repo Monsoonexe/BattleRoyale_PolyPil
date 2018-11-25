@@ -12,8 +12,10 @@ public class GameManager : MonoBehaviour {
     public GameObject zoneWall;
     public BRS_ChangeCircle zoneWallChangeCircle;
 
-    public int playerFlightSpeed = 200;
-
+    [Header("Supply Drop")]
+    public GameObject[] supplies;
+    public bool QueSupplyDrop = false;
+    
     private void Awake()
     {
         VerifyReferences();
@@ -21,12 +23,14 @@ public class GameManager : MonoBehaviour {
 
     private void DeployPlayersInPlane()
     {
-        //TODO
-        //ERROR! THIS BORKS EVERYTHING UP!!!
-        planeDropManager.LoadPlaneWithCargo(players);
-        planeDropManager.SetFlightSpeed(200);
-        planeDropManager.SetupFlightPath(DropTypeENUM.PLAYER);
+        planeDropManager.InitPlaneDrop(DropTypeENUM.PLAYER, players);
 
+
+    }
+
+    public void DeploySupplyDrop()
+    {
+        planeDropManager.InitPlaneDrop(DropTypeENUM.SUPPLY, supplies);
 
     }
 
@@ -44,16 +48,28 @@ public class GameManager : MonoBehaviour {
 	void Update () {
         if (StartInPlane)
         {
+            StartInPlane = false;//immediately set flag to false
             DeployPlayersInPlane();
-            StartInPlane = false;
+        }
+
+        if (QueSupplyDrop)
+        {
+            QueSupplyDrop = false;//immediately set flag to false
+            DeploySupplyDrop();
         }
     }
 
-    private void VerifyReferences()
+    private bool VerifyReferences()
     {
         if (players == null)
         {
             players = GameObject.FindGameObjectsWithTag("Player");
+        }
+
+        if(supplies == null)
+        {
+            Debug.LogError("ERROR! No supplies exist! Why is the plane flying?");
+            return false;
         }
 
         if (zoneWall == null)
@@ -68,6 +84,8 @@ public class GameManager : MonoBehaviour {
                 zoneWallChangeCircle = zoneWall.GetComponentInChildren<BRS_ChangeCircle>();
             }
         }
+
+        return true;
 
     }
 }

@@ -56,4 +56,5 @@ MonoBehaviour:
   planeDropManager: {fileID: 0}
   zoneWall: {fileID: 0}
   zoneWallChangeCircle: {fileID: 0}
-  playerFlightSpeed: 200
+  supplies: []
+  QueSupplyDrop: 1

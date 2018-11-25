@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23926602744246586}
   - component: {fileID: 135151366883888778}
   m_Layer: 0
-  m_Name: Debug_PointMarker
+  m_Name: PlaneDropManager_EndpointMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1776112423833054}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
