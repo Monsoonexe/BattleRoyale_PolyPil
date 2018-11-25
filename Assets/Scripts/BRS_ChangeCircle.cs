@@ -17,7 +17,7 @@ public class BRS_ChangeCircle : MonoBehaviour
 
     [Header("Shrinking Zones")]
     public Projector safeZone_Circle_Projector;
-    public List<int> ZoneTimes;
+    public int[] ZoneTimes;
 
 	#region Private Members
 	private bool Shrinking;  // this can be set to PUBLIC in order to troubleshoot.  It will show a checkbox in the Inspector
@@ -131,7 +131,7 @@ public class BRS_ChangeCircle : MonoBehaviour
 	private int NextZoneTime()
 	{
         //if we have exceeded the count, just start over
-        if (zoneTimesIndex >= ZoneTimes.Count - 1) // Lists are zero-indexed
+        if (zoneTimesIndex > ZoneTimes.Length) // Lists are zero-indexed
             //zoneTimesIndex = -1;  // the fall-through (below) will increment this
             return -1;
 		// next time to wait
