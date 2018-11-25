@@ -964,11 +964,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114080687751938896, guid: 07b09818548fb4d41bfa95b56e1827cb,
-        type: 2}
-      propertyPath: supplies.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4853479469286482, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1018,9 +1013,14 @@ Prefab:
       objectReference: {fileID: 567795628}
     - target: {fileID: 114080687751938896, guid: 07b09818548fb4d41bfa95b56e1827cb,
         type: 2}
-      propertyPath: supplies.Array.data[0]
-      value: 
-      objectReference: {fileID: 100000, guid: 202dbef25913a2845a2652d67e76bcfb, type: 3}
+      propertyPath: QueSupplyDrop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114080687751938896, guid: 07b09818548fb4d41bfa95b56e1827cb,
+        type: 2}
+      propertyPath: StartInPlane
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07b09818548fb4d41bfa95b56e1827cb, type: 2}
   m_IsPrefabAsset: 0
@@ -1421,7 +1421,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1257939349}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -1554,7 +1554,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1453010187}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -2012,7 +2012,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1708320201}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -2213,7 +2213,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1773511130}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -2299,7 +2299,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1828446265}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -2446,17 +2446,6 @@ Prefab:
       propertyPath: supplyDropZones.Array.data[4]
       value: 
       objectReference: {fileID: 1828446265}
-    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
-        type: 2}
-      propertyPath: DEBUG
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114630260696749518, guid: 4be5ada959d178b4db3e40c4a3443be4,
-        type: 2}
-      propertyPath: endpointMarkerPrefab
-      value: 
-      objectReference: {fileID: 1776112423833054, guid: fdda0326e7f6bf047bfd5488c1f49bcf,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4be5ada959d178b4db3e40c4a3443be4, type: 2}
   m_IsPrefabAsset: 0

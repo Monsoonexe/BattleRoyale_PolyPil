@@ -308,4 +308,5 @@ MonoBehaviour:
   airspeed: 100
   cargo: []
   hasDroppedCargo: 0
-  planeCam: {fileID: 20571116978990774}
+  planeCameraHolder: {fileID: 1728888186039676}
+  DEBUG: 1

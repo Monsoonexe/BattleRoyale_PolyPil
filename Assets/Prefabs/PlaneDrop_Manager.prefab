@@ -66,7 +66,8 @@ MonoBehaviour:
   - {fileID: 0}
   BRS_PlaneSpawn: {fileID: 1535088515930718, guid: 561ed58d5b5b7d3428a78123e277914e,
     type: 2}
-  endpointMarker: {fileID: 1776112423833054, guid: fdda0326e7f6bf047bfd5488c1f49bcf,
+  endpointMarkerPrefab: {fileID: 1776112423833054, guid: fdda0326e7f6bf047bfd5488c1f49bcf,
     type: 2}
-  failedPathAltitudeIncrementAmount: 50
+  planeSpeed_PlayerDrop: 200
+  planeSpeed_SupplyDrop: 350
   DEBUG: 0
