@@ -61,16 +61,16 @@ public class GameManager : MonoBehaviour {
 
     private bool VerifyReferences()
     {
-        if (players == null)
+        if (players.Length < 1)
         {
             players = GameObject.FindGameObjectsWithTag("Player");
         }
 
-        if(supplies == null)
-        {
-            Debug.LogError("ERROR! No supplies exist! Why is the plane flying?");
-            return false;
-        }
+        //if(supplies == null)
+        //{
+        //    Debug.LogError("ERROR! No supplies exist! Why is the plane flying?");
+        //    return false;
+        //}
 
         if (zoneWall == null)
         {

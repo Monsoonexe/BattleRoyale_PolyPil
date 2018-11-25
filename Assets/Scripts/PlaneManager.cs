@@ -25,6 +25,7 @@ public class PlaneManager : MonoBehaviour
         {
             if (burden.gameObject.CompareTag("Player"))
             {
+                //Debug.Log("Player On Board");
                 playerIsOnBoard = true;
             }
         }

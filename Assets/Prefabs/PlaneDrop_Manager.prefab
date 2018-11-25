@@ -68,6 +68,6 @@ MonoBehaviour:
     type: 2}
   endpointMarkerPrefab: {fileID: 1776112423833054, guid: fdda0326e7f6bf047bfd5488c1f49bcf,
     type: 2}
-  planeSpeed_PlayerDrop: 200
+  planeSpeed_PlayerDrop: 100
   planeSpeed_SupplyDrop: 350
   DEBUG: 0
