@@ -1270,8 +1270,8 @@ MonoBehaviour:
   ItemName: Item Name
   ItemType: 0
   ItemRarity: 1
-  ItemAmount: 0
-  PickUpButtonText: 70
+  ItemAmount: 1
+  PickUpButtonText: 69
   ToolTipWidget: {fileID: 1323010033884472}
   itemModelHolder: {fileID: 1212142973163956}
   ItemBackground: {fileID: 114292304226369264}

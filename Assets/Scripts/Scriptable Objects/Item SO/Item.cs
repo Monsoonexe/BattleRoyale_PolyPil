@@ -7,7 +7,6 @@ public class Item : ScriptableObject {
     public ItemRarityENUM itemRarity;
     public int quantity;
     public int stackQuantity; // <= 1 means cannot stack
-    public char buttonToPickUp = 'F';
     public Sprite itemIcon;
     public GameObject itemModel;
     [Range(0, 1)]
