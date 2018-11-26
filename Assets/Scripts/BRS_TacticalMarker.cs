@@ -16,7 +16,7 @@ public class BRS_TacticalMarker : MonoBehaviour
     //Variables for raycasting tooltips
     private GameObject GOPlayerIsCurrentlyLookingAt = null;
     private List<GameObject> interactableObjectsWithinRange = new List<GameObject>();
-
+    private bool playerIsLookingAtItem = false;
     
     void Start ()
 	{
@@ -49,7 +49,8 @@ public class BRS_TacticalMarker : MonoBehaviour
             for (int i = 0; i < interactableObjectsWithinRange.Count; ++i)
             {
                 FN_ItemManager itemManager = interactableObjectsWithinRange[i].GetComponent<FN_ItemManager>();
-                itemManager.ToggleModelVisible(itemManager.CompareModel(GOPlayerIsCurrentlyLookingAt));
+                playerIsLookingAtItem = itemManager.CompareModel(GOPlayerIsCurrentlyLookingAt);
+                itemManager.ToggleModelVisible(playerIsLookingAtItem);
 
             }
         }

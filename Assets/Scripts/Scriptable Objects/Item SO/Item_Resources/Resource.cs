@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 public class Resource : Item {
-    [Header("Resource")]
-    public ResourceTypeENUM resourceType;
+    //[Header("Resource")]
+    //public ResourceTypeENUM resourceType;
 
     private void Awake()
     {

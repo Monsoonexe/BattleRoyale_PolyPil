@@ -2,6 +2,7 @@
 using UnityEngine;
 
 public class Weapon : Item {
+    
     [Header("Weapon")]
     public WeaponTypeENUM weaponType;
     [Range(1, 2)]
@@ -11,7 +12,7 @@ public class Weapon : Item {
     public int damage;
     public int bulletsPerMag;
     public float reloadSpeed;
-    public float firingSpeed;
+    public float shotsPerSecond;
     //public AudioClip shotSound;
 
 

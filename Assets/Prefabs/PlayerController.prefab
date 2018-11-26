@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 54053143549845786}
   - component: {fileID: 82456282939202388}
   - component: {fileID: 114897435443365382}
+  - component: {fileID: 114540646353966380}
   m_Layer: 2
   m_Name: PlayerController
   m_TagString: Player
@@ -525,6 +526,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: eac97415c443103469da033bfdbedbaf, type: 2}
+--- !u!114 &114540646353966380
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1760171480275810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4e8f1485055aa4fac9d504d792abe8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cashOnHand: 0
+  inventorySlots: 3
+  resources: 
+  DEBUG: 0
 --- !u!114 &114897435443365382
 MonoBehaviour:
   m_ObjectHideFlags: 1

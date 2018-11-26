@@ -20,8 +20,10 @@ public class FN_ItemManager : MonoBehaviour
     public GameObject itemModelHolder;
     public RawImage ItemBackground;
 
+    //reference to the physical, visible model of object
     private GameObject itemModel;
-
+    
+    //Tooltip TMP references
 	private TextMeshProUGUI[] TMPTexts;
 	private TextMeshProUGUI PickUpButton;
 	private TextMeshProUGUI TMP_ItemType;
@@ -47,9 +49,23 @@ public class FN_ItemManager : MonoBehaviour
         return false;
     }
 
+    //public ResourceTypeENUM GetResourceType()
+    //{
+    //    if(ItemType == ItemTypeENUM.resource)
+    //    {
+
+    //        return scriptableObject_Item.resourceType;
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("ERROR! Item attempting to be accessed is not an item of type Resource.");
+    //    }
+    //    return ResourceTypeENUM.NULL;
+    //}
+
 	// Use this for initialization
 	void Start ()
-	{
+    { 
         //init from scriptable object if provided
         if (scriptableObject_Item != null) InitFromScriptableObject();
         else Debug.LogError("Error! No Scriptable Object Loaded. What am I???");
@@ -106,5 +122,10 @@ public class FN_ItemManager : MonoBehaviour
         ToolTipWidget.SetActive(_isActive);
         //Debug.Log("Show item " + ItemName + ": " + _isActive);
 
+    }
+
+    public Item GetItem()
+    {
+        return scriptableObject_Item;
     }
 }

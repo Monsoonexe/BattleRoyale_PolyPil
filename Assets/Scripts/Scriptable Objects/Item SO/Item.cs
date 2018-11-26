@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Item : ScriptableObject {
+public abstract class Item : ScriptableObject {
     [Header("Item")]
     public string itemName;
     public ItemTypeENUM itemType;
