@@ -9,17 +9,19 @@ public class InventoryManager : MonoBehaviour {
 
     public int cashOnHand = 0;
     public int inventorySlots = 3;
+    public List<Item> inventoryArray = new List<Item>();
 
     [Header("Resources")]
 
     //TODO figure out a way to label each element in Inspector for clarity
-    public int[] resources;
+    //public int[] resources;
 
     public bool DEBUG = false;
 
+
+
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
@@ -27,12 +29,12 @@ public class InventoryManager : MonoBehaviour {
 		
 	}
 
-    private void InitResourcesList()
-    {
-        string[] enumNames = Enum.GetNames(typeof(ResourceTypeENUM));//how many resources exist?
-        resources = new int[enumNames.Length];//instantiate list with same length
+    //private void InitResourcesList()
+    //{
+    //    //string[] enumNames = Enum.GetNames(typeof(ResourceTypeENUM));//how many resources exist?
+    //    //resources = new int[enumNames.Length];//instantiate list with same length
 
-    }
+    //}
 
 public void ModifyMoney(int amount)
     {
@@ -44,44 +46,74 @@ public void ModifyMoney(int amount)
         }
     }
 
-    public void ModifyResources(ResourceTypeENUM _resourceType, int _amount)
+    public void ModifyResources(Resource resource)
     {
-        int index = (int)_resourceType;
-        //clamp maximum resource amount
-        resources[index] = (resources[index] + _amount > RESOURCEMAXAMOUNT) ? RESOURCEMAXAMOUNT : (resources[index] + _amount);
-
-        if(resources[index] < 0)
-        {
-            Debug.LogError("ERROR! Resources have gone below 0!!! " + ((ResourceTypeENUM)index).ToString());
-        }
+        //TODO
+        //Resource dictionary
 
     }
 
-    public void AddItem(Item item)
+    //is this item stackable?
+    //does this item already exist in inventory
+    //finish stack, then add rest
+    //is there enough space?
+    //add
+
+    public bool AddItem(FN_ItemManager itemManager)
     {
+        Item item = itemManager.scriptableObject_Item;
+        bool canAddItem = false;
 
-        //best implementation so far
-        Weapon weaponItem;
-        Throwable throwItem;
-        Resource resourceItem;
-
-        switch (item.itemType)
+        if(item is Ammo)
         {
-            case ItemTypeENUM.weapon:
-                weaponItem = (Weapon)item;
-                Debug.Log("WeaponItem.ReloadSpeed: " + weaponItem.reloadSpeed);
-                break;
-            case ItemTypeENUM.throwable:
-                throwItem = (Throwable)item;
-                Debug.Log("WeaponItem.ReloadSpeed: " + throwItem.cookTime);
-                break;
-            case ItemTypeENUM.resource:
-                resourceItem = (Resource)item;
-                Debug.Log("WeaponItem.ReloadSpeed: " + resourceItem.itemName);
-                break;
-
+            //does this item already exist in inventory?
+            //is there room in that slot for this amount?
+            if (inventoryArray.Count < inventorySlots)
+            {
+                //
+                canAddItem = true;
+            }
         }
-    }
+        else if (item is Attachment)
+        {
+            if (inventoryArray.Count < inventorySlots)
+            {
+                //
+                canAddItem = true;
+            }
+        }
+        else if (item is Currency)
+        {
+            ModifyMoney(itemManager.ItemAmount);
+            canAddItem = true;
+        }
+        else if (item is Resource)
+        {
+            ModifyResources((Resource)item);
+            canAddItem = true;
+        }
+        else if (item is Throwable)
+        {
+            //does this item already exist in inventory?
+            //is there room in that slot for this amount?
+            if (inventoryArray.Count < inventorySlots)
+            {
+                //
+                canAddItem = true;
+            }
+        }
+        else if(item is Weapon)
+        {
+            if (inventoryArray.Count < inventorySlots)
+            {
+                //
+                canAddItem = true;
+            }
+        }
+
+        //return whether or not the item was accepted
+        return canAddItem;
+    }//end AddItem()
 
    
 }
