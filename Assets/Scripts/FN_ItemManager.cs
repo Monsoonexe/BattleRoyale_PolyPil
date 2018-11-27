@@ -9,7 +9,6 @@ public class FN_ItemManager : MonoBehaviour
     public Item scriptableObject_Item;
 	[Header("---Pick Up Item Tool Tip Parameters---")]
 	public string ItemName;
-	public ItemTypeENUM ItemType;
 	public ItemRarityENUM ItemRarity;
 	public int ItemAmount;
 
@@ -35,9 +34,7 @@ public class FN_ItemManager : MonoBehaviour
     {
         //read stats from SO
         ItemName = scriptableObject_Item.itemName;
-        ItemType = scriptableObject_Item.itemType;
         ItemRarity = scriptableObject_Item.itemRarity;
-        ItemAmount = scriptableObject_Item.quantity;
 
         //instantiate item model. rotation matches that of parent
         this.itemModel = Instantiate(scriptableObject_Item.itemModel, itemModelHolder.transform.position, itemModelHolder.transform.rotation, itemModelHolder.transform);
@@ -86,7 +83,7 @@ public class FN_ItemManager : MonoBehaviour
 
 			case "_txtType":
 				TMP_ItemType = TMPTexts [i];
-				TMP_ItemType.text = ItemType.ToString();
+				TMP_ItemType.text = scriptableObject_Item.GetType().ToString();
 				break;
 
 			case "_txtItemName":

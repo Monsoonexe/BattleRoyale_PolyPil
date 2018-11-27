@@ -9,7 +9,6 @@ public class Throwable : Item {
 
     private void Awake()
     {
-        this.itemType = ItemTypeENUM.throwable;
         this.stackQuantity = 5;
     }
 }

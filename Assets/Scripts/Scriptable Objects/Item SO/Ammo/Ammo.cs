@@ -8,7 +8,6 @@ public class Ammo : Item
 
     private void Awake()
     {
-        this.itemType = ItemTypeENUM.ammo;
         this.stackQuantity = 36;
         
     }

@@ -27,14 +27,12 @@ public class Weapon : Item {
 
     private void Awake()
     {
-        this.itemType = ItemTypeENUM.weapon;
-        this.quantity = 1;
         this.stackQuantity = 1;
     }
 
     private void GrabAttachementReferences()
     {
-        
+        //TODO Integrate attachments
     //    attachments.Add
     //    attach_barrel
     //    attach_barrel;
