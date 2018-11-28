@@ -1,26 +1,64 @@
 ﻿using UnityEngine;
 [System.Serializable]
-public class InventorySlot{
+public class InventorySlot {
     private Item _item;
     private int _quantity;
     private int _stackQuantity;
 
-    public InventorySlot(Item item, int quantity = 1, int stackQuantity = 1)
+    public InventorySlot()
     {
-        if(quantity >= 0)
+        //used to create a truly empty slot
+        _item = null;
+        _quantity = 0;
+        _stackQuantity = 0;
+    }
+
+    //public InventorySlot(Item item, int quantity = 1, int stackQuantity = 1)//deprecated
+    //{
+    //    if (quantity >= 0)
+    //    {
+    //        _quantity = quantity;
+    //    }
+    //    else
+    //    {
+    //        //complain
+    //        Debug.LogError("ERROR! Cannot create an inventory slot with less than nothing in it!");
+    //    }
+
+    //    _stackQuantity = stackQuantity;//value 1>= means it does not stack.
+    //    _item = item;
+        
+    //}//deprecated
+
+    public bool AddToSlot(Item item, int quantity = 1, int stackQuantity = 1)
+    {
+        bool operationSuccessful = true;
+        if (quantity <= 0)
         {
-            _quantity = quantity;
+            Debug.LogError("ERROR! Cannot add 0 or less amount to inventory!");
+            operationSuccessful = false;
         }
         else
         {
-            //complain
-            Debug.LogError("ERROR! Cannot create an inventory slot with less than nothing in it!");
+            _quantity = quantity;
+            _stackQuantity = stackQuantity;//value 1>= means it does not stack.
+            _item = item;
         }
 
-        _stackQuantity = stackQuantity;//value 1>= means it does not stack.
-        _item = item;
+        return operationSuccessful;
         
+        
+    }
 
+    public bool IsEmpty()
+    {
+        bool slotIsEmpty = false;
+        if (_quantity < 1 || _item == null)
+        {
+            slotIsEmpty = true;
+        }
+
+        return slotIsEmpty;
     }
 
     public Item GetItem()
