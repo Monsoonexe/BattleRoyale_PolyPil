@@ -176,8 +176,8 @@ public class BRS_PlaneDropManager : MonoBehaviour
                 endpointMarker.GetComponent<MeshRenderer>().enabled = true;//makes marker visible for debugging purposes
             }
 
-                //test if flight path goes through LZ
-                if (TestRaycastThroughDropZone(planeStartPoint, endpointMarker.transform.position, acceptableDropZones))
+            //test if flight path goes through LZ
+            if (TestRaycastThroughDropZone(planeStartPoint, endpointMarker.transform.position, acceptableDropZones))
             {
                 flightPathThroughLZ = true;
             }
