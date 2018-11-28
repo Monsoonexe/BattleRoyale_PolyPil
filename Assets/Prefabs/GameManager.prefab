@@ -57,4 +57,4 @@ MonoBehaviour:
   zoneWall: {fileID: 0}
   zoneWallChangeCircle: {fileID: 0}
   supplies: []
-  QueSupplyDrop: 1
+  QueSupplyDrop: 0
