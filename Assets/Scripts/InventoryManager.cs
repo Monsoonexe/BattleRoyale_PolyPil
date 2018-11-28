@@ -22,6 +22,13 @@ public class InventoryManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        for(int i = 0; i < inventorySlots; ++i)
+        {
+            //add blank slots to each element
+            inventoryArray.Add(new InventorySlot());
+            
+        }
+
 	}
 	
 	// Update is called once per frame
@@ -66,19 +73,43 @@ public bool ModifyMoney(int amount)
     //add
     private bool AddToNextAvailableSlot(Item item, int quantity = 1)
     {
+        if (DEBUG) Debug.Log("Attempting to add to next available slot.");
         //returns the number of items added
         bool operationSuccessful = false;
-        if (inventoryArray.Count >= inventorySlots) return false;//inventory full
-        for(int i = 0; i < inventoryArray.Count; ++i)
+
+        int nextEmptySlot = GetNextEmptySlot();
+        if(nextEmptySlot < 0)//inventory full
         {
-            if(inventoryArray[i] == null)
+            operationSuccessful = false;
+            if (DEBUG) Debug.Log("Item rejected from inventory: Inventory full.");
+        }
+        else
+        {
+            operationSuccessful = inventoryArray[nextEmptySlot].AddToSlot(item, quantity, item.stackQuantity);
+            if (DEBUG && operationSuccessful) Debug.Log(inventoryArray[nextEmptySlot].GetItem().name + " was added to slot no: " + nextEmptySlot.ToString());
+        }
+        
+        return operationSuccessful;
+    }
+
+    private int GetNextEmptySlot()
+    {
+        int nextEmptySlot = -1; // 0> implies no free slot
+        for(int i = 0; i < inventoryArray.Count; ++i)//loop through each element in list
+        {
+            if (DEBUG) Debug.Log("Checking if slot " + i.ToString() + " is empty....");
+            if (inventoryArray[i].IsEmpty())
             {
-                inventoryArray[i] = new InventorySlot(item, quantity, item.stackQuantity);
-                operationSuccessful = true;
+                nextEmptySlot = i;
                 break;
             }
+            else
+            {
+                if (DEBUG) Debug.Log("Slot " + i.ToString() + " already filled with: " + inventoryArray[i].GetItem().name);
+            }
         }
-        return operationSuccessful;
+
+        return nextEmptySlot;
     }
 
     private List<int> FindIndicesOfItem(Item itemToFind)
@@ -126,9 +157,7 @@ public bool ModifyMoney(int amount)
     {
         Item item = itemManager.scriptableObject_Item;
         bool itemAddSuccess = false;
-
         
-
 
         //if(item is Ammo)
         //{
@@ -164,6 +193,7 @@ public bool ModifyMoney(int amount)
 
             if (item.stackQuantity <= 1)
             {
+                if (DEBUG) Debug.Log("Item is not stackable....");
                 itemAddSuccess = AddToNextAvailableSlot(item);
             }
             else
@@ -174,8 +204,9 @@ public bool ModifyMoney(int amount)
                 
             }
         }
+        //if (DEBUG && itemAddSuccess) Debug.Log("Item successfully added to inventory!");
+        //if (DEBUG && !itemAddSuccess) Debug.Log("Item was not added inventory.");
 
-        //return whether or not the item was accepted
         return itemAddSuccess;
     }//end AddItem()
 
