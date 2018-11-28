@@ -131,10 +131,10 @@ public class BRS_ChangeCircle : MonoBehaviour
 	private int NextZoneTime()
 	{
         //if we have exceeded the count, just start over
-        if (zoneTimesIndex > ZoneTimes.Length) // Lists are zero-indexed
+        if (++zoneTimesIndex > ZoneTimes.Length) // Lists are zero-indexed
             //zoneTimesIndex = -1;  // the fall-through (below) will increment this
             return -1;
 		// next time to wait
-		return ZoneTimes[++zoneTimesIndex];
+		return ZoneTimes[zoneTimesIndex];
 	}
 }
