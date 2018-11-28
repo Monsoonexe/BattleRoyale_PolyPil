@@ -16,13 +16,25 @@ public class BRS_TacticalMarker : MonoBehaviour
     //Variables for raycasting tooltips
     private GameObject GOPlayerIsCurrentlyLookingAt = null;
     private List<GameObject> interactableObjectsWithinRange = new List<GameObject>();
-    private bool playerIsLookingAtItem = false;
-    
+
+    //variables for inventory manager
+    private InventoryManager inventoryManager;
+    private FN_ItemManager itemManagerPlayerIsLookingAt;
+
+
     void Start ()
 	{
+        if(inventoryManager == null)
+        {
+            inventoryManager = GetComponent<InventoryManager>();
+            if(inventoryManager == null)
+            {
+                Debug.LogError("ERROR! No InventoryManager on player!");
+            }
+        }
 		FPCameraTransform = GetComponentInChildren<Camera>().transform;
 		MinimapCamHeight = GameObject.FindGameObjectWithTag ("MiniMap Camera").transform.position.y;
-		tacticalMarkerOffset = MinimapCamHeight - 10.0f;
+		tacticalMarkerOffset = MinimapCamHeight - 10.0f;//marker always shown below map
 	}
 
 	// Update is called once per frame
@@ -36,23 +48,65 @@ public class BRS_TacticalMarker : MonoBehaviour
 
         //HandleRaycasting to tooltips
         HandleToolTipRaycasting();
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            HandleInteraction();
+            
+        }
 
+    }
+
+    private void HandleItemPickup()
+    {
+        if (itemManagerPlayerIsLookingAt != null)//then player can pick up item
+        {
+            //attempt to add the item to inventory
+            if (inventoryManager.AddItem(itemManagerPlayerIsLookingAt))
+            {
+                //TODO 
+                //PLAYER IS NOT ALWAYS ABLE TO PICK UP ITEM!!!!
+                interactableObjectsWithinRange.Remove(itemManagerPlayerIsLookingAt.gameObject);
+                Destroy(itemManagerPlayerIsLookingAt.gameObject);
+            }
+        }
+        else
+        {
+            Debug.Log("Pickp Failed:   Player Not Looking at an item. Looking at " + itemManagerPlayerIsLookingAt.name);
+        }
+    }
+
+    private void HandleInteraction()
+    {
+        HandleItemPickup();
+        //TODO what if the player E's (interacts) with a door or a car?
+        
     }
 
     private void HandleToolTipRaycasting()
     {
         if (interactableObjectsWithinRange.Count > 0)
         {
+            bool playerIsLookingAtItem = false;
+            FN_ItemManager itemManager;
             //Debug.Log("interactableObjectsWithinRange: " + interactableObjectsWithinRange.Count);
             GOPlayerIsCurrentlyLookingAt = WhatIsPlayerLookingAt();
 
             for (int i = 0; i < interactableObjectsWithinRange.Count; ++i)
             {
-                FN_ItemManager itemManager = interactableObjectsWithinRange[i].GetComponent<FN_ItemManager>();
+                itemManager = interactableObjectsWithinRange[i].GetComponent<FN_ItemManager>();
+                //is the player pointing at an item that is within interaction range?
                 playerIsLookingAtItem = itemManager.CompareModel(GOPlayerIsCurrentlyLookingAt);
-                itemManager.ToggleModelVisible(playerIsLookingAtItem);
+                if (playerIsLookingAtItem)
+                {
+                    itemManagerPlayerIsLookingAt = itemManager;
+                }
+                itemManager.ToggleToolTipVisibility(playerIsLookingAtItem);
 
             }
+        }
+        else
+        {//there is nothing nearby for the player to look at
+            itemManagerPlayerIsLookingAt = null;
         }
     }
 
@@ -72,7 +126,7 @@ public class BRS_TacticalMarker : MonoBehaviour
 		}
 	}
 
-    private bool PlayerIsLookingAtTarget(GameObject target)
+    private bool PlayerIsLookingAtTarget(GameObject target)//deprecated
     {
         bool isLooking = false;
         RaycastHit hitInfo;
@@ -146,13 +200,14 @@ public class BRS_TacticalMarker : MonoBehaviour
 
     public void OnTriggerStay(Collider triggerVolume)
     {
+        
     }
 
     public void OnTriggerExit(Collider triggerVolume)
     {
         if (triggerVolume.CompareTag("Item"))
         {
-            triggerVolume.gameObject.GetComponent<FN_ItemManager>().ToggleModelVisible(false);//stop showing item tooltip
+            triggerVolume.gameObject.GetComponent<FN_ItemManager>().ToggleToolTipVisibility(false);//stop showing item tooltip
             interactableObjectsWithinRange.Remove(triggerVolume.gameObject);//remove game object from list
         }
         
