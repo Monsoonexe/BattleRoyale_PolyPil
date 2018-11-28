@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+[System.Serializable]
 public class InventorySlot{
     private Item _item;
     private int _quantity;
