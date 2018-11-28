@@ -114,7 +114,7 @@ public class FN_ItemManager : MonoBehaviour
         return this.itemModel;
     }
 
-    public void ToggleModelVisible(bool _isActive)
+    public void ToggleToolTipVisibility(bool _isActive)
     {
         ToolTipWidget.SetActive(_isActive);
         //Debug.Log("Show item " + ItemName + ": " + _isActive);
@@ -125,4 +125,5 @@ public class FN_ItemManager : MonoBehaviour
     {
         return scriptableObject_Item;
     }
+
 }
