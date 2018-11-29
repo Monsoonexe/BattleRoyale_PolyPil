@@ -40,14 +40,16 @@ public class BRS_TacticalMarker : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+        //HandleRaycasting to tooltips
+        HandleToolTipRaycasting();
+
         //Handle Tactical Marker
-		if (Input.GetKeyDown (KeyCode.T))
+        if (Input.GetKeyDown (KeyCode.T))
 		{
             PlaceTacticalMarker();
 		}
 
-        //HandleRaycasting to tooltips
-        HandleToolTipRaycasting();
+        //handle interactions
         if(Input.GetKeyDown(KeyCode.E))
         {
             HandleInteraction();
@@ -63,8 +65,6 @@ public class BRS_TacticalMarker : MonoBehaviour
             //attempt to add the item to inventory
             if (inventoryManager.AddItem(itemManagerPlayerIsLookingAt))
             {
-                //TODO 
-                //PLAYER IS NOT ALWAYS ABLE TO PICK UP ITEM!!!!
                 interactableObjectsWithinRange.Remove(itemManagerPlayerIsLookingAt.gameObject);
                 Destroy(itemManagerPlayerIsLookingAt.gameObject);
             }
