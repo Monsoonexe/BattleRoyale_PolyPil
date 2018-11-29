@@ -3,12 +3,17 @@ using System.Collections.Generic;
 
 public class BRS_TacticalMarker : MonoBehaviour
 {
-	public GameObject TacticalMarker;
+    //tactical marker stuff
+	public GameObject TacticalMarkerPrefab;
 
 	private float tacticalMarkerOffset;
 	private Transform FPCameraTransform;
 	private float MinimapCamHeight;
-    private GameObject tacticalMarkerObject;
+    private GameObject tacticalMarkerInstance;
+
+    //TODO
+    //hold 't' for 3 seconds to remove marker from map
+    //destroy marker if distance is too great
 
     //what is the maximum distance away a player can set a tactical marker
     private readonly int tacticalMarkerPlaceDistanceLimit = 300;
@@ -17,25 +22,82 @@ public class BRS_TacticalMarker : MonoBehaviour
     private GameObject GOPlayerIsCurrentlyLookingAt = null;
     private List<GameObject> interactableObjectsWithinRange = new List<GameObject>();
 
-    
+    //variables for inventory manager
+    private InventoryManager inventoryManager;
+    private FN_ItemManager itemManagerPlayerIsLookingAt;
+
+
     void Start ()
 	{
+        if(inventoryManager == null)
+        {
+            inventoryManager = GetComponent<InventoryManager>();
+            if(inventoryManager == null)
+            {
+                Debug.LogError("ERROR! No InventoryManager on player!");
+            }
+        }
 		FPCameraTransform = GetComponentInChildren<Camera>().transform;
 		MinimapCamHeight = GameObject.FindGameObjectWithTag ("MiniMap Camera").transform.position.y;
-		tacticalMarkerOffset = MinimapCamHeight - 10.0f;
+		tacticalMarkerOffset = MinimapCamHeight - 10.0f;//marker always shown below map
 	}
 
-	// Update is called once per frame
-	void Update ()
+    private void DestroyExistingTacticalMarkerAtDistanceLimit()
+    {
+        //if distance between player and marker > distance limit
+        if (Vector3.Distance(this.transform.position, tacticalMarkerInstance.transform.position) > tacticalMarkerPlaceDistanceLimit)
+        {
+            //TODO Should test 2D distance!
+            Debug.Log("Distance: " + Vector3.Distance(this.transform.position, tacticalMarkerInstance.transform.position));
+            Destroy(tacticalMarkerInstance);
+        }
+    }
+
+    // Update is called once per frame
+    void Update ()
 	{
+        //HandleRaycasting to tooltips
+        HandleToolTipRaycasting();
+        //if(tacticalMarkerInstance) DestroyExistingTacticalMarkerAtDistanceLimit();
+
         //Handle Tactical Marker
-		if (Input.GetKeyDown (KeyCode.T))
+        if (Input.GetKeyDown (KeyCode.T))
 		{
             PlaceTacticalMarker();
 		}
 
-        //HandleRaycasting to tooltips
-        HandleToolTipRaycasting();
+        //handle interactions
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            HandleInteraction();
+            
+        }
+
+    }
+
+    private void HandleItemPickup()
+    {
+        //attempt to add the item to inventory
+        if (inventoryManager.AddItem(itemManagerPlayerIsLookingAt))
+        {
+            interactableObjectsWithinRange.Remove(itemManagerPlayerIsLookingAt.gameObject);
+            Destroy(itemManagerPlayerIsLookingAt.gameObject);
+        }
+        
+    }
+
+    private void HandleInteraction()
+    {
+        //if player is interacting with an item
+        if (itemManagerPlayerIsLookingAt) HandleItemPickup();
+        else
+        {
+            Debug.Log("Nothing to interact with.");
+        }
+
+        //if(itemManagerPlayerIsLookingAt == vehicle) enter vehicle
+        //if(itemManagerPlayerIsLookingAt == door) open door
+        
 
     }
 
@@ -43,15 +105,27 @@ public class BRS_TacticalMarker : MonoBehaviour
     {
         if (interactableObjectsWithinRange.Count > 0)
         {
+            bool playerIsLookingAtInteractable = false;
+            FN_ItemManager itemManager;
             //Debug.Log("interactableObjectsWithinRange: " + interactableObjectsWithinRange.Count);
             GOPlayerIsCurrentlyLookingAt = WhatIsPlayerLookingAt();
 
             for (int i = 0; i < interactableObjectsWithinRange.Count; ++i)
             {
-                FN_ItemManager itemManager = interactableObjectsWithinRange[i].GetComponent<FN_ItemManager>();
-                itemManager.ToggleModelVisible(itemManager.CompareModel(GOPlayerIsCurrentlyLookingAt));
+                itemManager = interactableObjectsWithinRange[i].GetComponent<FN_ItemManager>();
+                //is the player pointing at an item that is within interaction range?
+                playerIsLookingAtInteractable = itemManager.CompareModel(GOPlayerIsCurrentlyLookingAt);
+                if (playerIsLookingAtInteractable)
+                {
+                    itemManagerPlayerIsLookingAt = itemManager;
+                }
+                itemManager.ToggleToolTipVisibility(playerIsLookingAtInteractable);
 
             }
+        }
+        else
+        {//there is nothing nearby for the player to look at
+            itemManagerPlayerIsLookingAt = null;
         }
     }
 
@@ -62,16 +136,16 @@ public class BRS_TacticalMarker : MonoBehaviour
         if (Physics.Raycast(FPCameraTransform.position, FPCameraTransform.forward, out hitInfo, tacticalMarkerPlaceDistanceLimit))
 		{
             Vector3 markerLocation = new Vector3(hitInfo.point.x, tacticalMarkerOffset, hitInfo.point.z);
-            if (tacticalMarkerObject != null)
+            if (tacticalMarkerInstance != null)
             {
-                Destroy(tacticalMarkerObject);
+                Destroy(tacticalMarkerInstance);
             }
-            tacticalMarkerObject = Instantiate(TacticalMarker, markerLocation, Quaternion.identity);
+            tacticalMarkerInstance = Instantiate(TacticalMarkerPrefab, markerLocation, Quaternion.identity);
             
 		}
 	}
 
-    private bool PlayerIsLookingAtTarget(GameObject target)
+    private bool PlayerIsLookingAtTarget(GameObject target)//deprecated
     {
         bool isLooking = false;
         RaycastHit hitInfo;
@@ -145,13 +219,14 @@ public class BRS_TacticalMarker : MonoBehaviour
 
     public void OnTriggerStay(Collider triggerVolume)
     {
+        
     }
 
     public void OnTriggerExit(Collider triggerVolume)
     {
         if (triggerVolume.CompareTag("Item"))
         {
-            triggerVolume.gameObject.GetComponent<FN_ItemManager>().ToggleModelVisible(false);//stop showing item tooltip
+            triggerVolume.gameObject.GetComponent<FN_ItemManager>().ToggleToolTipVisibility(false);//stop showing item tooltip
             interactableObjectsWithinRange.Remove(triggerVolume.gameObject);//remove game object from list
         }
         

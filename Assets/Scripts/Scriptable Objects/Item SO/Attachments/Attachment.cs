@@ -9,8 +9,7 @@ public class Attachment : Item
 
     private void Awake()
     {
-        this.itemType = ItemTypeENUM.attachment;
-        this.quantity = 1;
+        this.stackQuantity = 3;
 
     }
 

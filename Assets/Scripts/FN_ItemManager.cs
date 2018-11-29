@@ -9,7 +9,6 @@ public class FN_ItemManager : MonoBehaviour
     public Item scriptableObject_Item;
 	[Header("---Pick Up Item Tool Tip Parameters---")]
 	public string ItemName;
-	public ItemTypeENUM ItemType;
 	public ItemRarityENUM ItemRarity;
 	public int ItemAmount;
 
@@ -20,8 +19,10 @@ public class FN_ItemManager : MonoBehaviour
     public GameObject itemModelHolder;
     public RawImage ItemBackground;
 
+    //reference to the physical, visible model of object
     private GameObject itemModel;
-
+    
+    //Tooltip TMP references
 	private TextMeshProUGUI[] TMPTexts;
 	private TextMeshProUGUI PickUpButton;
 	private TextMeshProUGUI TMP_ItemType;
@@ -33,9 +34,7 @@ public class FN_ItemManager : MonoBehaviour
     {
         //read stats from SO
         ItemName = scriptableObject_Item.itemName;
-        ItemType = scriptableObject_Item.itemType;
         ItemRarity = scriptableObject_Item.itemRarity;
-        ItemAmount = scriptableObject_Item.quantity;
 
         //instantiate item model. rotation matches that of parent
         this.itemModel = Instantiate(scriptableObject_Item.itemModel, itemModelHolder.transform.position, itemModelHolder.transform.rotation, itemModelHolder.transform);
@@ -47,9 +46,23 @@ public class FN_ItemManager : MonoBehaviour
         return false;
     }
 
+    //public ResourceTypeENUM GetResourceType()
+    //{
+    //    if(ItemType == ItemTypeENUM.resource)
+    //    {
+
+    //        return scriptableObject_Item.resourceType;
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("ERROR! Item attempting to be accessed is not an item of type Resource.");
+    //    }
+    //    return ResourceTypeENUM.NULL;
+    //}
+
 	// Use this for initialization
 	void Start ()
-	{
+    { 
         //init from scriptable object if provided
         if (scriptableObject_Item != null) InitFromScriptableObject();
         else Debug.LogError("Error! No Scriptable Object Loaded. What am I???");
@@ -70,7 +83,7 @@ public class FN_ItemManager : MonoBehaviour
 
 			case "_txtType":
 				TMP_ItemType = TMPTexts [i];
-				TMP_ItemType.text = ItemType.ToString();
+				TMP_ItemType.text = scriptableObject_Item.GetType().ToString();
 				break;
 
 			case "_txtItemName":
@@ -101,10 +114,16 @@ public class FN_ItemManager : MonoBehaviour
         return this.itemModel;
     }
 
-    public void ToggleModelVisible(bool _isActive)
+    public void ToggleToolTipVisibility(bool _isActive)
     {
         ToolTipWidget.SetActive(_isActive);
         //Debug.Log("Show item " + ItemName + ": " + _isActive);
 
     }
+
+    public Item GetItem()
+    {
+        return scriptableObject_Item;
+    }
+
 }

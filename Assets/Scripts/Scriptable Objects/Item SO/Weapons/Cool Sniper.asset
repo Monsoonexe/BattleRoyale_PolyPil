@@ -15,12 +15,18 @@ MonoBehaviour:
   itemType: 5
   itemRarity: 3
   quantity: 1
-  stackQuantity: 0
-  buttonToPickUp: 70
+  stackQuantity: 1
   itemIcon: {fileID: 0}
   itemModel: {fileID: 1215029005244844, guid: cfcb332d67619214087fa9778edd768a, type: 2}
   itemCondition: 1
-  ammoType: 2
   weaponType: 3
   hands: 2
-  attachments: []
+  damage: 10
+  bulletsPerMag: 6
+  reloadSpeed: 3
+  shotsPerSecond: 0.5
+  attach_barrel: {fileID: 0}
+  attach_barrelTip: {fileID: 0}
+  attach_mag: {fileID: 0}
+  attach_grip: {fileID: 0}
+  attach_stock: {fileID: 0}
