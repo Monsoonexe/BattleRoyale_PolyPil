@@ -539,8 +539,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cashOnHand: 0
   inventorySlots: 3
-  resources: 
-  DEBUG: 0
+  inventoryArray: []
+  DEBUG: 1
 --- !u!114 &114897435443365382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 587bd0ab57fbb9e4a9c84491df8edd0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TacticalMarker: {fileID: 1719107597108838, guid: 8a952bd2b71bddc40b3833f03149bf4b,
+  TacticalMarkerPrefab: {fileID: 1719107597108838, guid: 8a952bd2b71bddc40b3833f03149bf4b,
     type: 2}
 --- !u!124 &124898995348026226
 Behaviour:
