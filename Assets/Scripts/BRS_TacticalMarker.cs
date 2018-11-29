@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class BRS_TacticalMarker : MonoBehaviour
 {
-	public GameObject TacticalMarker;
+	public GameObject TacticalMarkerPrefab;
 
 	private float tacticalMarkerOffset;
 	private Transform FPCameraTransform;
@@ -121,7 +121,7 @@ public class BRS_TacticalMarker : MonoBehaviour
             {
                 Destroy(tacticalMarkerObject);
             }
-            tacticalMarkerObject = Instantiate(TacticalMarker, markerLocation, Quaternion.identity);
+            tacticalMarkerObject = Instantiate(TacticalMarkerPrefab, markerLocation, Quaternion.identity);
             
 		}
 	}
