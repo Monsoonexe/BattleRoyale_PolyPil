@@ -60,33 +60,35 @@ public class BRS_TacticalMarker : MonoBehaviour
 
     private void HandleItemPickup()
     {
-        if (itemManagerPlayerIsLookingAt != null)//then player can pick up item
+        //attempt to add the item to inventory
+        if (inventoryManager.AddItem(itemManagerPlayerIsLookingAt))
         {
-            //attempt to add the item to inventory
-            if (inventoryManager.AddItem(itemManagerPlayerIsLookingAt))
-            {
-                interactableObjectsWithinRange.Remove(itemManagerPlayerIsLookingAt.gameObject);
-                Destroy(itemManagerPlayerIsLookingAt.gameObject);
-            }
+            interactableObjectsWithinRange.Remove(itemManagerPlayerIsLookingAt.gameObject);
+            Destroy(itemManagerPlayerIsLookingAt.gameObject);
         }
-        else
-        {
-            Debug.Log("Pickp Failed:   Player Not Looking at an item. Looking at " + itemManagerPlayerIsLookingAt.name);
-        }
+        
     }
 
     private void HandleInteraction()
     {
-        HandleItemPickup();
-        //TODO what if the player E's (interacts) with a door or a car?
+        //if player is interacting with an item
+        if (itemManagerPlayerIsLookingAt) HandleItemPickup();
+        else
+        {
+            Debug.Log("Nothing to interact with.");
+        }
+
+        //if(itemManagerPlayerIsLookingAt == vehicle) enter vehicle
+        //if(itemManagerPlayerIsLookingAt == door) open door
         
+
     }
 
     private void HandleToolTipRaycasting()
     {
         if (interactableObjectsWithinRange.Count > 0)
         {
-            bool playerIsLookingAtItem = false;
+            bool playerIsLookingAtInteractable = false;
             FN_ItemManager itemManager;
             //Debug.Log("interactableObjectsWithinRange: " + interactableObjectsWithinRange.Count);
             GOPlayerIsCurrentlyLookingAt = WhatIsPlayerLookingAt();
@@ -95,12 +97,12 @@ public class BRS_TacticalMarker : MonoBehaviour
             {
                 itemManager = interactableObjectsWithinRange[i].GetComponent<FN_ItemManager>();
                 //is the player pointing at an item that is within interaction range?
-                playerIsLookingAtItem = itemManager.CompareModel(GOPlayerIsCurrentlyLookingAt);
-                if (playerIsLookingAtItem)
+                playerIsLookingAtInteractable = itemManager.CompareModel(GOPlayerIsCurrentlyLookingAt);
+                if (playerIsLookingAtInteractable)
                 {
                     itemManagerPlayerIsLookingAt = itemManager;
                 }
-                itemManager.ToggleToolTipVisibility(playerIsLookingAtItem);
+                itemManager.ToggleToolTipVisibility(playerIsLookingAtInteractable);
 
             }
         }
