@@ -3,12 +3,17 @@ using System.Collections.Generic;
 
 public class BRS_TacticalMarker : MonoBehaviour
 {
+    //tactical marker stuff
 	public GameObject TacticalMarkerPrefab;
 
 	private float tacticalMarkerOffset;
 	private Transform FPCameraTransform;
 	private float MinimapCamHeight;
-    private GameObject tacticalMarkerObject;
+    private GameObject tacticalMarkerInstance;
+
+    //TODO
+    //hold 't' for 3 seconds to remove marker from map
+    //destroy marker if distance is too great
 
     //what is the maximum distance away a player can set a tactical marker
     private readonly int tacticalMarkerPlaceDistanceLimit = 300;
@@ -37,11 +42,23 @@ public class BRS_TacticalMarker : MonoBehaviour
 		tacticalMarkerOffset = MinimapCamHeight - 10.0f;//marker always shown below map
 	}
 
-	// Update is called once per frame
-	void Update ()
+    private void DestroyExistingTacticalMarkerAtDistanceLimit()
+    {
+        //if distance between player and marker > distance limit
+        if (Vector3.Distance(this.transform.position, tacticalMarkerInstance.transform.position) > tacticalMarkerPlaceDistanceLimit)
+        {
+            //TODO Should test 2D distance!
+            Debug.Log("Distance: " + Vector3.Distance(this.transform.position, tacticalMarkerInstance.transform.position));
+            Destroy(tacticalMarkerInstance);
+        }
+    }
+
+    // Update is called once per frame
+    void Update ()
 	{
         //HandleRaycasting to tooltips
         HandleToolTipRaycasting();
+        //if(tacticalMarkerInstance) DestroyExistingTacticalMarkerAtDistanceLimit();
 
         //Handle Tactical Marker
         if (Input.GetKeyDown (KeyCode.T))
@@ -50,7 +67,7 @@ public class BRS_TacticalMarker : MonoBehaviour
 		}
 
         //handle interactions
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             HandleInteraction();
             
@@ -119,11 +136,11 @@ public class BRS_TacticalMarker : MonoBehaviour
         if (Physics.Raycast(FPCameraTransform.position, FPCameraTransform.forward, out hitInfo, tacticalMarkerPlaceDistanceLimit))
 		{
             Vector3 markerLocation = new Vector3(hitInfo.point.x, tacticalMarkerOffset, hitInfo.point.z);
-            if (tacticalMarkerObject != null)
+            if (tacticalMarkerInstance != null)
             {
-                Destroy(tacticalMarkerObject);
+                Destroy(tacticalMarkerInstance);
             }
-            tacticalMarkerObject = Instantiate(TacticalMarkerPrefab, markerLocation, Quaternion.identity);
+            tacticalMarkerInstance = Instantiate(TacticalMarkerPrefab, markerLocation, Quaternion.identity);
             
 		}
 	}
