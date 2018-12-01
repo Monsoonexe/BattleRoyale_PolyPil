@@ -8,15 +8,15 @@ public class Compass : MonoBehaviour
 
     public void Start()
     {
-        if(Player == null)//error prevention
+        if (Player == null)//error prevention
         {
             Player = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
-            if(Player == null)//if STILL null/ Player tag cannot be found
+            if (Player == null)//if STILL null/ Player tag cannot be found
             {
                 Debug.LogError("ERROR!" + this.gameObject.name + ": No object in scene tagged 'Player'.");//log error
             }
         }
-       
+
     }
 
 	public void Update()
