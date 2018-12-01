@@ -14,18 +14,18 @@ public class BRS_PlaneDropManager : MonoBehaviour
     public GameObject BRS_PlaneSpawn;//plane object (model) to spawn
     public GameObject endpointMarkerPrefab;//marks beginnning and end points for debugging purposes
 
-    public int planeSpeed_PlayerDrop = 200;
+    public int planeSpeed_PlayerDrop = 150;
     public int planeSpeed_SupplyDrop = 300;
 
     public bool DEBUG = true;//if true, prints debug statements
-
-    private bool verifiedPath = false;
+    
     private GameObject[] acceptableDropZones;
 
     //how high does the plane fly?
     private float planeFlightAltitude = 800.0f;
+    private float startingFlightAltitude;
 
-    private readonly int failedPathAltitudeIncrementAmount = 50;//if the flight path fails, raise the altitude by this much before trying again
+    private readonly int failedPathAltitudeIncrementAmount = 25;//if the flight path fails, raise the altitude by this much before trying again
 
     //radius of spawn zone
     private float spawnBoundsCircleRadius = 100.0f;
@@ -36,7 +36,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
     private GameObject endpointMarker;
 
     private int unsuccessfulPasses = 0;
-    private readonly int flightPathChecksUntilFailure = 12;
+    private readonly int flightPathChecksUntilFailure = 15;
 
     //stuff to pass on to plane when deployed
     private GameObject targetDropZone;
@@ -66,12 +66,10 @@ public class BRS_PlaneDropManager : MonoBehaviour
             return false;
         }
 
-        //set and check altitude
-        planeFlightAltitude = planeSpawnBounds.position.y > 0 ? planeSpawnBounds.position.y : 200f;//verifies that altitude is above 0
-
-        //set radius of spawnBoundsCircleRadius
-        //leave at default value if local scale is too small
-        spawnBoundsCircleRadius = planeSpawnBounds.localScale.x / 2 > spawnBoundsCircleRadius ? planeSpawnBounds.localScale.x / 2 : spawnBoundsCircleRadius;
+        if(endpointMarkerPrefab == null)
+        {
+            endpointMarkerPrefab = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        }
         
         return true;
     }
@@ -110,6 +108,14 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     void Start()
     {
+        //set and check altitude
+        planeFlightAltitude = planeSpawnBounds.position.y > 0 ? planeSpawnBounds.position.y : 200f;//verifies that altitude is above 0
+        startingFlightAltitude = planeFlightAltitude;//set starting value
+
+        //set radius of spawnBoundsCircleRadius
+        //leave at default value if local scale is too small
+        spawnBoundsCircleRadius = planeSpawnBounds.localScale.x / 2 > spawnBoundsCircleRadius ? planeSpawnBounds.localScale.x / 2 : spawnBoundsCircleRadius;
+
         //error checking
         if (VerifyReferences())
         {
@@ -134,19 +140,25 @@ public class BRS_PlaneDropManager : MonoBehaviour
 
     }
 
-    public void InitPlaneDrop(DropTypeENUM dropType)
+    public bool InitPlaneDrop(DropTypeENUM dropType)
     {
         ConfigureFlightType(dropType);
-        SetupFlightPath();
+        if (SetupFlightPath())
+        {
+            SpawnPlane();//catch the plane Manager to keep track of the plane further
+            return true;
+        }
+
+        return false;
     }
 
-    public void InitPlaneDrop(DropTypeENUM dropType, GameObject[] incomingCargo)
+    public bool InitPlaneDrop(DropTypeENUM dropType, GameObject[] incomingCargo)
     {
         planeCargo = incomingCargo;
-        InitPlaneDrop(dropType);
+        return InitPlaneDrop(dropType);//"boil up"
     }
 
-    private void SetupFlightPath()
+    private bool SetupFlightPath()
     {
         bool endpointHit = false;
         bool flightPathThroughLZ = false;
@@ -199,46 +211,37 @@ public class BRS_PlaneDropManager : MonoBehaviour
             //does the flight unobstructed and through a drop zone
             if(endpointHit && flightPathThroughLZ)
             {
-                //SUCCESSS!!!!!!!
+                //SUCCESS!!!!!!!
                 ToggleDropZones(true);//turn LZ on
-                SpawnPlane();
-                if(!DEBUG) DestroyMarkerObjects();
-                verifiedPath = true;
-                return;
+                planeFlightAltitude = startingFlightAltitude;//reset altitude for next try
+                unsuccessfulPasses = 0;//reset failures
+                if (!DEBUG) DestroyMarkerObjects();
+                return true;
             }
             else
             {
                 endpointHit = false;
                 flightPathThroughLZ = false;
-                verifiedPath = false;
             }
 
             
         }//end for
-
-        if (!verifiedPath)
+        
+        //this altitude is not working. keep raising
+        if (++unsuccessfulPasses > flightPathChecksUntilFailure)//we've been here before
         {
-            //this altitude is not working. keep raising
-            if (++unsuccessfulPasses > flightPathChecksUntilFailure)//we've been here before
-            {
-                Debug.LogError("ERROR! Flight path failed after " + unsuccessfulPasses * flightPathChecksUntilFailure + " attempts. Adjust planeSpawnBounds. Skipping Plane Deployment");
-                return;
-            }
-            //Debug.Log("Altitude too low. Raising Altitude and trying again.");
-            //raise altitude and try again
-            planeFlightAltitude += failedPathAltitudeIncrementAmount;
-            //try again
-            SetupFlightPath();
+            Debug.LogError("ERROR! Flight path failed after " + unsuccessfulPasses * flightPathChecksUntilFailure + " attempts. Adjust planeSpawnBounds. Skipping Plane Deployment");
+            return false;
         }
-        else
-        {
-            return;
-        }
+        //raise altitude and try again
+        planeFlightAltitude += failedPathAltitudeIncrementAmount;
+        //try again
+        return SetupFlightPath();
         
         
     }//end func
 
-    private void SpawnPlane()
+    public PlaneManager SpawnPlane()
     {
         //create this plane in the world at this position, with no rotation
         GameObject plane = Instantiate(BRS_PlaneSpawn, planeStartPoint, Quaternion.identity);//do not set plane to be child of this object!
@@ -246,6 +249,7 @@ public class BRS_PlaneDropManager : MonoBehaviour
         //get plane manager
         PlaneManager planeManager = plane.GetComponent<PlaneManager>();
         planeManager.InitPlane(targetDropZone, planeCargo, planeFlightSpeed);
+        return planeManager;
 
     }
 
