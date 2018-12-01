@@ -19,7 +19,7 @@ public class Compass : MonoBehaviour
        
     }
 
-    public void Update()
+	public void Update()
 	{
 		//Get a handle on the Image's uvRect
 		CompassImage.uvRect = new Rect(Player.localEulerAngles.y / 360, 0, 1, 1);
@@ -41,6 +41,9 @@ public class Compass : MonoBehaviour
 		switch (displayangle)
 		{
 		case 0:
+			//Do this
+			CompassDirectionText.text = "N";
+			break;
 		case 360:
 			//Do this
 			CompassDirectionText.text = "N";
@@ -53,7 +56,7 @@ public class Compass : MonoBehaviour
 			//Do this
 			CompassDirectionText.text = "E";
 			break;
-		case 130:
+		case 135:
 			//Do this
 			CompassDirectionText.text = "SE";
 			break;
@@ -69,7 +72,11 @@ public class Compass : MonoBehaviour
 			//Do this
 			CompassDirectionText.text = "W";
 			break;
-		default:
+        case 315:
+            //Do this
+            CompassDirectionText.text = "NW";
+            break;
+        default:
 			CompassDirectionText.text = headingAngle.ToString ();
 			break;
 		}
