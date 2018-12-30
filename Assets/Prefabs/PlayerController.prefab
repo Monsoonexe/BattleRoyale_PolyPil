@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 82456282939202388}
   - component: {fileID: 114897435443365382}
   - component: {fileID: 114540646353966380}
+  - component: {fileID: 114670003860330312}
   m_Layer: 2
   m_Name: PlayerController
   m_TagString: Player
@@ -541,6 +542,17 @@ MonoBehaviour:
   inventorySlots: 3
   inventoryArray: []
   DEBUG: 1
+--- !u!114 &114670003860330312
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1760171480275810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe88a2f26c985d7468d134968d4eee02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114897435443365382
 MonoBehaviour:
   m_ObjectHideFlags: 1
